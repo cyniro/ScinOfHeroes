@@ -46,7 +46,7 @@ public class Node : MonoBehaviour
 
     void BuildTurret(TurretBlueprint blueprint)
     {
-        if (PlayerStats.Instance.Money < blueprint.cost)
+        if (PlayerStats.Instance.currentMoney < blueprint.cost)
         {
             Debug.Log("Not enough money !!!!");
             return;
@@ -65,7 +65,7 @@ public class Node : MonoBehaviour
 
     public void UpgradeTurret()
     {
-        if (PlayerStats.Instance.Money < turretBlueprint.upgradeCost)
+        if (PlayerStats.Instance.currentMoney < turretBlueprint.upgradeCost)
         {
             Debug.Log("Not enough money to upgrade !!!");
             return;

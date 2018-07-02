@@ -40,5 +40,14 @@ public class PoolManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Clear the singleton
+    /// </summary>
+    protected void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
 }

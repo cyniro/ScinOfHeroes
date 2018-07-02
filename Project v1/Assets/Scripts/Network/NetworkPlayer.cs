@@ -9,26 +9,21 @@ using HeroNetworkPlayer = NetworkPlayer;
 
 public class NetworkPlayer : NetworkBehaviour
 {
+    [SyncVar(hook = "InitUI")]
+    private int PFCScore = 0;
+    [SyncVar]
+    private int m_PlayerID;
+    private int winner;
 
-    public event Action<HeroNetworkPlayer> syncVarsChanged;
-
-    //Server only event
-    public event Action<HeroNetworkPlayer> activesPlayersEvent;
+    private Dictionary<string, NewNetworkedPool> poolDictionary;
+    private HeroNetworkManager m_NetManager;
 
     //Server only event
     public event Action<HeroNetworkPlayer> choiceDone;
-
-
-
-
-    [SyncVar(hook = "InitUI")]
-    private int PFCScore = 0;
-    public int GetPFSScore
-    { get { return PFCScore; } }
-
-
-
     public int PFCChoice = 0;
+
+    public Transform spawnPoint;
+    public SceneFader sceneFader;
     public GameObject go;
 
     [SerializeField]
@@ -36,37 +31,23 @@ public class NetworkPlayer : NetworkBehaviour
     [SerializeField]
     protected GameObject hero;
 
-    public SceneFader sceneFader;
-
-    private int winner;
-
-    private Dictionary<string, NewNetworkedPool> poolDictionary;
-
-
-    [SyncVar]
-    private int m_PlayerID;
-
-    private HeroNetworkManager m_NetManager;
-
-
+    public int GetPFSScore
+    {
+        get { return PFCScore; }
+    }
     /// <summary>
     /// Gets this player's id
     /// </summary>
     public int playerID
-    { get { return m_PlayerID; } }
-
-
+    {
+        get { return m_PlayerID; }
+    }
     ///// <summary>
     ///// Get the PFCPlayerObject associate with this player
     ///// </summary>
-    //public PFCPlayer PFCPlayer
-    //{ get; private set; }
+    //public PFCPlayer PFCPlayer{ get; private set; }
 
-    public NetworkPlayer s_LocalPlayer
-    { get; private set; }
-
-
-
+    public NetworkPlayer s_LocalPlayer { get; private set; }
 
     private void Update()
     {
@@ -79,8 +60,6 @@ public class NetworkPlayer : NetworkBehaviour
             }
         }
     }
-
-
 
     [Server]
     public void SetPlayerID(int playerID)
@@ -106,20 +85,17 @@ public class NetworkPlayer : NetworkBehaviour
         m_NetManager.RegisterNetworkPlayer(this);
     }
 
-
     /// <summary>
-    /// Set initial values
+    /// Automacally called, this methode Set initial values On start and only on the local player
     /// </summary>
     [Client]
-    public override void OnStartLocalPlayer()       // called automatically on start and only on the local player
+    public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
         Debug.Log("OnStartLocalPlayer");
         s_LocalPlayer = this;
 
-
         CmdActivesPlayers();
-
 
         //recupère le nom, la liste des unités sélectionnée... dans un fichier de sauvegarde (playerDataManager)
     }
@@ -129,13 +105,10 @@ public class NetworkPlayer : NetworkBehaviour
     {
         Debug.Log("CmdActivesPlayers");
 
-        //connected = true;
-
         if (m_NetManager.playerCount >= 2)
         {
             m_NetManager.ProgressToPFCScene();
         }
-
     }
 
     [Command]
@@ -149,7 +122,6 @@ public class NetworkPlayer : NetworkBehaviour
     {
         //sceneFader.FadeTo( );
     }
-
 
     /// <summary>
     /// Called when we enter MapRomainScene
@@ -172,12 +144,6 @@ public class NetworkPlayer : NetworkBehaviour
         GameObject _hero = Instantiate(hero, new Vector3(0, 0, -63), Quaternion.identity);
         NetworkServer.Spawn(_hero);
     }
-
-
-
-
-
-
 
     public void RegisterAgentSelectedList()
     {
@@ -206,8 +172,6 @@ public class NetworkPlayer : NetworkBehaviour
         Debug.Log("RpcRegisterAgentSelectedList", this);
         Debug.Log("agent = " + agent);
 
-
-
         if (poolDictionary[agent] != null)
         {
             Debug.Log("poolDictionary[agent] != null");
@@ -216,8 +180,6 @@ public class NetworkPlayer : NetworkBehaviour
             poolDictionary[agent].Init();
         }
     }
-
-
 
     /// <summary>
     /// Called when we enter PFCScene
@@ -230,8 +192,6 @@ public class NetworkPlayer : NetworkBehaviour
 
         InitUI(0);
     }
-
-
 
     public void InitUI(int newScore)
     {
@@ -247,7 +207,6 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-
     public override void OnNetworkDestroy()
     {
         Debug.Log("NetworkPlayer call OnNetworkDestroy");
@@ -260,9 +219,6 @@ public class NetworkPlayer : NetworkBehaviour
         }
     }
 
-
-
-
     public void GetPFCChoice(int choice)
     {
         CmdSetPFCChoice(choice);
@@ -272,16 +228,12 @@ public class NetworkPlayer : NetworkBehaviour
         CmdAreAllChoicesDone();
     }
 
-
-
     [Command]
     private void CmdSetPFCChoice(int choice)
     {
         Debug.Log("CmdSetPFCChoice");
         PFCChoice = choice;
     }
-
-
 
     [Command]
     private void CmdAreAllChoicesDone()
@@ -296,10 +248,6 @@ public class NetworkPlayer : NetworkBehaviour
         CmdCompareChoices();
     }
 
-
-
-
-
     [Command]
     private void CmdCompareChoices()
     {
@@ -308,7 +256,6 @@ public class NetworkPlayer : NetworkBehaviour
         int otherChoice = UIPFCController.Instance.m_otherPlayer.PFCChoice;
 
         winner = -1;
-
 
         if (localChoice == otherChoice)
         {
@@ -372,8 +319,6 @@ public class NetworkPlayer : NetworkBehaviour
         UIPFCController.Instance.PFCWinAnim(p1Choice, p2Choice, winner);
     }
 
-
-
     [Command]
     public void CmdSpawnFromPool(int indexUniteToSpawn, Vector3 position)
     {
@@ -387,5 +332,4 @@ public class NetworkPlayer : NetworkBehaviour
     {
 
     }
-
 }

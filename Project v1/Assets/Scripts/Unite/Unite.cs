@@ -20,8 +20,6 @@ public class Unite : MonoBehaviour, IDamageable
 
     private EnemyHealthBar enemyHealthBar;
 
-    private Animator m_Anim;
-
     private float fireCountdown = 0f;
 
     /// <summary>
@@ -63,11 +61,11 @@ public class Unite : MonoBehaviour, IDamageable
     [SerializeField]
     private float m_Resistance = 0f;
 
-    [SerializeField]
     public bool range = false;
     public bool melee = false;
 
-    public int meleeDamage; //auto attack damage, must be ignored if range , faire un CustomEditor (https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html) pour hide/show ref suivant le bool
+    [SerializeField]
+    protected int meleeDamage; //auto attack damage, must be ignored if range , faire un CustomEditor (https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html) pour hide/show ref suivant le bool
 
     [HideInInspector]
     public float normalizedHealth;
@@ -80,22 +78,20 @@ public class Unite : MonoBehaviour, IDamageable
     public int lootValue = 50;
     public float CDBetweenSpawns;
     public int cost;
-
+    /// <summary>
+    /// Scale adjustment for an applied affect
+    /// </summary>
+    public float appliedEffectScale = 1;
     /// <summary>
     /// Position offset for an applied affect
     /// </summary>
     public Vector3 appliedEffectOffset = Vector3.zero;
 
-    /// <summary>
-    /// Scale adjustment for an applied affect
-    /// </summary>
-    public float appliedEffectScale = 1;
-
     public GameObject deathEffect;
 
     #endregion
 
-    #region Proprities
+    #region Proprieties
 
     /// <summary>
     /// Gets this unit's original Resistance
@@ -212,7 +208,6 @@ public class Unite : MonoBehaviour, IDamageable
 
     private void OnEnable()
     {
-        m_Anim = GetComponent<Animator>();
         LazyLoad();
         m_Health = m_StartingHealth;
         enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();

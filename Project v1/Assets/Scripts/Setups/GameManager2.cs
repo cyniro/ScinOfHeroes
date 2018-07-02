@@ -33,7 +33,6 @@ public class GameManager2 : NetworkBehaviour {
 
     public static bool GameIsOver;
 
-    //[SyncVar(hook = "InitPool")]
     public int playerInGameScene;
 
     private void Start()
@@ -62,7 +61,6 @@ public class GameManager2 : NetworkBehaviour {
         completeLevelUI.SetActive(true);
     }
 
-
     public void InitPool()
     {
         Debug.Log("InitPool dans GM2");
@@ -78,7 +76,4 @@ public class GameManager2 : NetworkBehaviour {
             }
         }
     }
-
-
-   
 }

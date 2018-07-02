@@ -16,7 +16,7 @@ public class LivesUI : MonoBehaviour
     {
         while (true)
         {
-            livesText.text = PlayerStats.Lives.ToString() + " LIVES";
+            livesText.text = PlayerStats.Instance.currentHealth.ToString() + " LIVES";
             yield return new WaitForSeconds(0.1f);
         }
 	}

@@ -5,20 +5,25 @@ using UnityEngine.UI;
 
 public class TowersMenu : MonoBehaviour
 {
+    private BuildManager buildManager;
+    private PlayerStats playerStats;
+
     public List<TurretBlueprint> bluePrintList;
+    public List<Button> buttonList;
 
     public GameObject arrow;
     public GameObject inverseArrow;
     public Animator anim;
 
-    public List<Button> buttonList;
-
-    BuildManager buildManager;
-
-
     void Start()
     {
         buildManager = BuildManager.Instance;
+        playerStats = PlayerStats.Instance;
+
+        if (playerStats != null)
+        {
+            playerStats.goldChanged += UpdateButtons;
+        }
     }
 
     public void SelectTurretToBuild(int index)
@@ -43,13 +48,13 @@ public class TowersMenu : MonoBehaviour
         inverseArrow.SetActive(false);
     }
 
-    public void CheckMoney()
+    public void UpdateButtons()
     {
         int i = 0;
 
         foreach (Button button in buttonList)
         {
-            if (PlayerStats.Instance.Money < bluePrintList[i].cost)
+            if (PlayerStats.Instance.currentMoney < bluePrintList[i].cost)
             {
                 if (button.interactable == true)
                     button.interactable = false;
@@ -62,5 +67,15 @@ public class TowersMenu : MonoBehaviour
 
             i++;
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (playerStats != null)
+        {
+            playerStats.goldChanged -= UpdateButtons;
+        }
+        else
+            Debug.LogWarning("Can't Unsub goldChanged event" + this);
     }
 }

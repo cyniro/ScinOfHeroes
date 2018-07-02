@@ -4,22 +4,17 @@ using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
-
-
     public static int EnemiesAlive = 0;
+
+    private float countdown = 2f;
+    private int waveIndex = 0;
 
     public Wave[] waves;
     public GameManager2 gameManager;
-
     public Transform spawnPoint;
-
-    public float timeBetweenWaves = 5f;
-    private float countdown = 2f;
-
     public Text waveCountdownText;
 
-    private int waveIndex = 0;
-
+    public float timeBetweenWaves = 5f;
 
     void Update()
     {
@@ -28,7 +23,7 @@ public class WaveSpawner : MonoBehaviour
 
         if (waveIndex == waves.Length)
         {
-        //    gameManager.WinLevel();
+            //    gameManager.WinLevel();
             this.enabled = false;
         }
 
@@ -60,7 +55,6 @@ public class WaveSpawner : MonoBehaviour
         }
 
         waveIndex++;
-
     }
 
     void SpawnEnemy(GameObject enemy)

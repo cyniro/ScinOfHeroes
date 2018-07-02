@@ -63,7 +63,16 @@ public class GameMaster : NetworkBehaviour
                 Debug.Log("otherPlayer = " + otherPlayer);
             }
         }
+    }
 
-        //UIPFCController.SetUI();
+    /// <summary>
+    /// Clear the singleton
+    /// </summary>
+    protected void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 }

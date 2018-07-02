@@ -53,7 +53,7 @@ void Update()
 
     void EndPath()
     {
-        PlayerStats.DecreaseLife();
+        PlayerStats.Instance.DecreaseLife();
         WaveSpawner.EnemiesAlive--;
 
         

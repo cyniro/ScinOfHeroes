@@ -5,8 +5,6 @@ using UnityEngine;
 public class BuildManager : MonoBehaviour {
 
     public static BuildManager Instance;
-    public GameObject buildEffect;
-    public GameObject sellEffect;
 
     #region Singleton
     void Awake()
@@ -20,16 +18,15 @@ public class BuildManager : MonoBehaviour {
     }
     #endregion
 
+    public GameObject buildEffect;
+    public GameObject sellEffect;
+    public NodeUI nodeUI;
 
     private TurretBlueprint turretToBuild;
     private Node selectedNode;
 
     public bool CanBuild { get { return turretToBuild != null; } }
-    public bool HasMoney { get { return PlayerStats.Instance.Money >= turretToBuild.cost; } }
-
-    public NodeUI nodeUI;
-
-
+    public bool HasMoney { get { return PlayerStats.Instance.currentMoney >= turretToBuild.cost; } }
 
     public void SelectNode (Node node)
     {
@@ -38,12 +35,6 @@ public class BuildManager : MonoBehaviour {
             DeselectNode();
             return;
         }
-
-        //if (node.buildingDisable)
-        //{
-        //    nodeUI.SetTarget(node);
-        //    return;
-        //}
 
         selectedNode = node;
         turretToBuild = null;

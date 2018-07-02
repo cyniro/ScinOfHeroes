@@ -92,50 +92,64 @@ public class Towers : MonoBehaviour, IDamageable
             removed(this.gameObject);
         }
 
-        GameObject towerDeathEffectInst = PoolManager.Instance.poolDictionnary[towerDeathEffect.name].GetFromPool(transform.position);  
+        GameObject towerDeathEffectInst = PoolManager.Instance.poolDictionnary[towerDeathEffect.name].GetFromPool(transform.position);
         towerDeathEffectInst.transform.rotation = transform.rotation;
 
         PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
     }
 
-
-    #region IDamageable Methode Useless
-    public void AddBuff(string buffName, float value, BuffType buffType)
+    /// <summary>
+    /// Returns a targetter that implement ITowerRadiusVisualizer
+    /// </summary>
+    /// <returns>ITowerRadiusVisualizers of tower</returns>
+    public ITowerRadiusProvider GetRadiusVisualizer()
     {
-        Debug.LogWarning("Towers dont get Buffs, you dumbass !!!");
-    }
-
-    public void RemoveBuff(string buffName, float value, BuffType buffType)
-    {
-        Debug.LogWarning("Towers dont get Buffs, you dumbass !!!");
-    }
-
-    public Dictionary<string, List<float>> GetASBoostsDictionary()
-    {
-        Debug.LogWarning("Methode not supposed to be called on a tower");
+        ITowerRadiusProvider visualizer = targetter as ITowerRadiusProvider;
+        if (visualizer != null)
+        {
+            return visualizer;
+        }
         return null;
     }
 
-    public Dictionary<string, List<float>> GetMSBoostsDictionary()
-    {
-        Debug.LogWarning("Methode not supposed to be called on a tower");
-        return null;
-    }
 
-    public Dictionary<string, List<float>> GetResiBoostsDictionary()
-    {
-        Debug.LogWarning("Methode not supposed to be called on a tower");
-        return null;
-    }
-    public void SetFx(GameObject fxPrefab)
-    {
-        Debug.LogWarning("Methode not supposed to be called on a tower");
+#region IDamageable Methode Useless
+public void AddBuff(string buffName, float value, BuffType buffType)
+{
+    Debug.LogWarning("Towers dont get Buffs, you dumbass !!!");
+}
 
-    }
-    public void RemoveFx(GameObject fxPrefab)
-    {
-        Debug.LogWarning("Methode not supposed to be called on a tower");
-    }
+public void RemoveBuff(string buffName, float value, BuffType buffType)
+{
+    Debug.LogWarning("Towers dont get Buffs, you dumbass !!!");
+}
+
+public Dictionary<string, List<float>> GetASBoostsDictionary()
+{
+    Debug.LogWarning("Methode not supposed to be called on a tower");
+    return null;
+}
+
+public Dictionary<string, List<float>> GetMSBoostsDictionary()
+{
+    Debug.LogWarning("Methode not supposed to be called on a tower");
+    return null;
+}
+
+public Dictionary<string, List<float>> GetResiBoostsDictionary()
+{
+    Debug.LogWarning("Methode not supposed to be called on a tower");
+    return null;
+}
+public void SetFx(GameObject fxPrefab)
+{
+    Debug.LogWarning("Methode not supposed to be called on a tower");
+
+}
+public void RemoveFx(GameObject fxPrefab)
+{
+    Debug.LogWarning("Methode not supposed to be called on a tower");
+}
     #endregion
 
 }
