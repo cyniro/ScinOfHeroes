@@ -56,8 +56,6 @@ public class HeroUI : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("ultimate.Skill = " + ultimate.Skill);
-
         for (int i = 0; i < hero.skills.Count; i++)
         {
             if (hero.skills[i].Skill == skill.inCD)

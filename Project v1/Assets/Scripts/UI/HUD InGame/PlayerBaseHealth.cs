@@ -18,16 +18,10 @@ public class PlayerBaseHealth : MonoBehaviour
     protected virtual void Start()
     {
         PlayerStats playerStats = PlayerStats.Instance;
-        if (playerStats == null)
-        {
-            Debug.LogWarning("something wrong happened" + this);
-            return;
-        }
         playerStats.damaged += UpdateDisplay;
 
         UpdateDisplay();
     }
-
 
     /// <summary>
     /// Get the current health of the home base and display it on display
@@ -35,11 +29,7 @@ public class PlayerBaseHealth : MonoBehaviour
     protected void UpdateDisplay()
     {
         PlayerStats playerStats = PlayerStats.Instance;
-        if (playerStats == null)
-        {
-            Debug.LogWarning("something wrong happened" + this);
-            return;
-        }
+
         display.text = playerStats.currentHealth.ToString(CultureInfo.InvariantCulture);
     }
 
@@ -49,11 +39,9 @@ public class PlayerBaseHealth : MonoBehaviour
     protected void OnDestroy()
     {
         PlayerStats playerStats = PlayerStats.Instance;
-        if (playerStats == null)
+        if (playerStats != null)
         {
-            Debug.LogWarning("something wrong happened" + this);
-            return;
+            playerStats.damaged -= UpdateDisplay;
         }
-        playerStats.damaged -= UpdateDisplay;
     }
 }

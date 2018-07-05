@@ -47,6 +47,6 @@ public class GoldUI : MonoBehaviour
     /// </summary>
     protected void UpdateDisplay()
     {
-        display.text = m_PlayerStats.currentMoney.ToString();
+        display.text = m_PlayerStats.currentGold.ToString();
     }
 }

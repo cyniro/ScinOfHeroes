@@ -881,23 +881,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ba142579d2f6294cbc615bb9f889b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
+  m_StartingHealth: 100
   m_FireRate: 1
-  bulletPrefab: {fileID: 0}
-  value: 50
-  CDBetweenSpawns: 0
-  price: 0
   m_MovementSpeed: 10
   m_Resistance: 0
   range: 0
   melee: 1
-  AAdamage: 30
-  startHealth: 10000
+  meleeDamage: 0
   normalizedHealth: 0
   targetter: {fileID: 114481884331908476}
   icon: {fileID: 0}
   unitData: {fileID: 0}
-  appliedEffectOffset: {x: 0, y: 0, z: 0}
+  bulletPrefab: {fileID: 0}
+  lootValue: 50
+  CDBetweenSpawns: 0
+  cost: 0
   appliedEffectScale: 1
+  appliedEffectOffset: {x: 0, y: 0, z: 0}
   deathEffect: {fileID: 1889897949588580, guid: b67ef08b0da70ef4b901900ba8080e29,
     type: 2}
   skills: []

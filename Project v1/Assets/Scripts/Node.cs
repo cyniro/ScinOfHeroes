@@ -46,13 +46,13 @@ public class Node : MonoBehaviour
 
     void BuildTurret(TurretBlueprint blueprint)
     {
-        if (PlayerStats.Instance.currentMoney < blueprint.cost)
+        if (PlayerStats.Instance.currentGold < blueprint.cost)
         {
             Debug.Log("Not enough money !!!!");
             return;
         }
 
-        PlayerStats.Instance.ChangeMoney(-blueprint.cost);
+        PlayerStats.Instance.ChangeGold(-blueprint.cost);
 
         _peones = PoolManager.Instance.poolDictionnary[peones.name].GetFromPool(spawnPointForPeones.position);
         _peones.transform.rotation = spawnPointForPeones.rotation;
@@ -65,13 +65,13 @@ public class Node : MonoBehaviour
 
     public void UpgradeTurret()
     {
-        if (PlayerStats.Instance.currentMoney < turretBlueprint.upgradeCost)
+        if (PlayerStats.Instance.currentGold < turretBlueprint.upgradeCost)
         {
             Debug.Log("Not enough money to upgrade !!!");
             return;
         }
 
-        PlayerStats.Instance.ChangeMoney(-turretBlueprint.upgradeCost);
+        PlayerStats.Instance.ChangeGold(-turretBlueprint.upgradeCost);
 
         //Get rid of the old turret
         PoolManager.Instance.poolDictionnary[turret.name].UnSpawnObject(turret);
@@ -94,7 +94,7 @@ public class Node : MonoBehaviour
 
     public void SellTurret()
     {
-        PlayerStats.Instance.ChangeMoney(turretBlueprint.GetSellAmount());
+        PlayerStats.Instance.ChangeGold(turretBlueprint.GetSellAmount());
 
         GameObject _selleffect = PoolManager.Instance.poolDictionnary[buildManager.sellEffect.name].GetFromPool(GetBuildPosition());
         _selleffect.transform.rotation = Quaternion.identity;

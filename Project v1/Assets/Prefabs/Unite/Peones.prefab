@@ -530,6 +530,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0cdfe77d6aef444b532a0033a9e751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
   m_StartingHealth: 40
   m_FireRate: 1
   m_MovementSpeed: 10
@@ -545,8 +546,8 @@ MonoBehaviour:
   lootValue: 0
   CDBetweenSpawns: 0
   cost: 0
-  appliedEffectOffset: {x: 0, y: 0, z: 0}
   appliedEffectScale: 1
+  appliedEffectOffset: {x: 0, y: 0, z: 0}
   deathEffect: {fileID: 0}
   m_Alignement: {fileID: 0}
   home: {fileID: 4120078837457102, guid: 359e00f62d5376e468aa995a2cf8d0db, type: 2}

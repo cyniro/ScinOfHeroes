@@ -33,19 +33,20 @@ public class TowersMenu : MonoBehaviour
     }
 
 
-    public void OpenMenu()
+    /// <summary>
+    /// Toggle open or close tower menu
+    /// </summary>
+    /// <param name="_switch">bool for open/close menu</param>
+    public void ToggleTowerMenu(bool _switch)
     {
-        anim.SetTrigger("OpenTowersMenu");
-        arrow.SetActive(false);
-        inverseArrow.SetActive(true);
-    }
-
-
-    public void CloseMenu()
-    {
-        anim.SetTrigger("CloseTowersMenu");
-        arrow.SetActive(true);
-        inverseArrow.SetActive(false);
+        if(_switch)
+        {
+            anim.SetBool("IsOpen", _switch);
+        }
+        else
+        {
+            anim.SetBool("IsOpen", _switch);
+        }
     }
 
     public void UpdateButtons()
@@ -54,7 +55,7 @@ public class TowersMenu : MonoBehaviour
 
         foreach (Button button in buttonList)
         {
-            if (PlayerStats.Instance.currentMoney < bluePrintList[i].cost)
+            if (PlayerStats.Instance.currentGold < bluePrintList[i].cost)
             {
                 if (button.interactable == true)
                     button.interactable = false;
@@ -75,7 +76,5 @@ public class TowersMenu : MonoBehaviour
         {
             playerStats.goldChanged -= UpdateButtons;
         }
-        else
-            Debug.LogWarning("Can't Unsub goldChanged event" + this);
     }
 }

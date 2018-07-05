@@ -22,6 +22,8 @@ public class Unite : MonoBehaviour, IDamageable
 
     private float fireCountdown = 0f;
 
+    private float m_OriginalCd;
+
     /// <summary>
     /// Contains this unit's AsBoost buffs and there values 
     /// </summary>
@@ -44,12 +46,22 @@ public class Unite : MonoBehaviour, IDamageable
     protected bool isDead = false;
 
     /// <summary>
+    /// use to check if this unit is on CD
+    /// </summary>
+    protected bool m_IsInCD;
+
+    /// <summary>
     /// Event that is fired when this instance is removed, such as when pooled or destroyed
     /// </summary>
     public event Action<GameObject> removed;
 
     public UnityAction takeDamageAction;
     public UnityAction attackAction;
+
+    /// <summary>
+    /// Will get in UnitConfiguration later On; the scriptableObject we need to discuss of ;)
+    /// </summary>
+    public string Unitname;
 
     [Header("Stats")]
     [SerializeField]
@@ -60,6 +72,8 @@ public class Unite : MonoBehaviour, IDamageable
     private float m_MovementSpeed = 10f;
     [SerializeField]
     private float m_Resistance = 0f;
+    [SerializeField]
+    protected float m_CdBetweenSpawn;
 
     public bool range = false;
     public bool melee = false;
@@ -76,7 +90,6 @@ public class Unite : MonoBehaviour, IDamageable
     public UnitData unitData;
     public GameObject bulletPrefab; // must be ignored if melee ,  faire un CustomEditor (https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html) pour hide/show ref suivant le bool
     public int lootValue = 50;
-    public float CDBetweenSpawns;
     public int cost;
     /// <summary>
     /// Scale adjustment for an applied affect
@@ -92,7 +105,6 @@ public class Unite : MonoBehaviour, IDamageable
     #endregion
 
     #region Proprieties
-
     /// <summary>
     /// Gets this unit's original Resistance
     /// </summary>
@@ -102,6 +114,20 @@ public class Unite : MonoBehaviour, IDamageable
     /// Gets this unit's original movement speed
     /// </summary>
     public float baseMovementSpeed { get; private set; }
+
+    /// <summary>
+    /// Gets this unit's spawn state by CD
+    /// </summary>
+    public bool isInCD { get; set; }
+
+    /// <summary>
+    /// Return the cd of this unit
+    /// </summary>
+    public float cDBetweenSpawns
+    {
+        get { return m_CdBetweenSpawn; }
+        set { }
+    }
 
     /// <summary>
     /// Return the Amount of this unit's starting health
@@ -138,7 +164,6 @@ public class Unite : MonoBehaviour, IDamageable
     /// Gets this unit's original fire rate
     /// </summary>
     public float basefireRate { get; private set; }
-
 
     /// <summary>
     /// Return position offset for an applied affect
@@ -197,6 +222,7 @@ public class Unite : MonoBehaviour, IDamageable
     /// </summary>
     protected virtual void LazyLoad()
     {
+        m_OriginalCd = m_CdBetweenSpawn;
         baseMovementSpeed = m_MovementSpeed;
         baseResistance = m_Resistance;
         basefireRate = m_FireRate;
@@ -277,6 +303,14 @@ public class Unite : MonoBehaviour, IDamageable
         {
             Die();
         }
+    }
+
+    /// <summary>
+    /// Reset the cd of this unit
+    /// </summary>
+    public void ResetCD()
+    {
+        m_CdBetweenSpawn = m_OriginalCd;
     }
 
     #region Buff & Fx
@@ -559,7 +593,7 @@ public class Unite : MonoBehaviour, IDamageable
         GameObject deathEffectInst = PoolManager.Instance.poolDictionnary[deathEffect.name].GetFromPool(transform.position);
         deathEffectInst.transform.rotation = transform.rotation;
 
-        PlayerStats.Instance.ChangeMoney(lootValue);
+        PlayerStats.Instance.ChangeGold(lootValue);
 
         WaveSpawner.EnemiesAlive--;
 

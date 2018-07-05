@@ -99,7 +99,7 @@ public class Peons : Unite
         {
             if (navMeshAgent.remainingDistance <= Mathf.Epsilon)
             {
-                PlayerStats.Instance.ChangeMoney(blueprint.cost);
+                PlayerStats.Instance.ChangeGold(blueprint.cost);
                 PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
             }
         }

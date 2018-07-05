@@ -14,7 +14,7 @@ public class UnitesMenu : NetworkBehaviour
     //private AgentSelector agentSelector;
     private PlayerStats playerStats;
 
-    public Vector3 spawnPoint;
+    public Transform defaultSpawnPoint;
 
     public List<Image> agentButtonsImageList;
     public List<Button> agentButtonsList;
@@ -25,22 +25,24 @@ public class UnitesMenu : NetworkBehaviour
     {
         //poolManager = PoolManager.Instance;
         //agentSelector = AgentSelector.Instance;
+        for (int i = 0; i < AgentSelector.Instance.selectedAgents.Count; i++)
+        {
+            agentButtonsImageList[i].sprite = AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().icon;
+            CDList.Add(AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().cDBetweenSpawns);
+            priceList.Add(AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().cost);
+            onCDList.Add(false);
+        }
+    }
+
+    private void Start()
+    {
         playerStats = PlayerStats.Instance;
 
         if (playerStats != null)
         {
             playerStats.goldChanged += UpdateButtons;
         }
-
-        for (int i = 0; i < AgentSelector.Instance.selectedAgents.Count; i++)
-        {
-            agentButtonsImageList[i].sprite = AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().icon;
-            CDList.Add(AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().CDBetweenSpawns);
-            priceList.Add(AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().cost);
-            onCDList.Add(false);
-        }
     }
-
 
     private void Update()
     {
@@ -56,9 +58,9 @@ public class UnitesMenu : NetworkBehaviour
                 if (CDList[i] <= 0)
                 {
                     onCDList[i] = false;
-                    CDList[i] = AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().CDBetweenSpawns;
-                    agentButtonsTextsList[i].text = null;
-                    if (PlayerStats.Instance.currentMoney > priceList[i])
+                    CDList[i] = AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>().cDBetweenSpawns; 
+                     agentButtonsTextsList[i].text = null;
+                    if (PlayerStats.Instance.currentGold > priceList[i])
                     {
                         button.interactable = true;
                     }
@@ -74,17 +76,23 @@ public class UnitesMenu : NetworkBehaviour
         {
             if (player.hasAuthority)
             {
-                player.CmdSpawnFromPool(indexUniteToSpawn, player.spawnPoint.position);
+                if (player.spawnPoint != null)
+                {
+                    player.CmdSpawnFromPool(indexUniteToSpawn, player.spawnPoint.position);
+                }
+                else
+                {
+                    player.CmdSpawnFromPool(indexUniteToSpawn, defaultSpawnPoint.position);
+                    Debug.LogWarning("player.spawnPoint is not set");
+                }
             }
         }
 
         onCDList[indexUniteToSpawn] = true;
         agentButtonsList[indexUniteToSpawn].interactable = false;
 
-        PlayerStats.Instance.ChangeMoney(-priceList[indexUniteToSpawn]);
+        PlayerStats.Instance.ChangeGold(-priceList[indexUniteToSpawn]);
     }
-
-
 
     public void UpdateButtons()
     {
@@ -92,7 +100,7 @@ public class UnitesMenu : NetworkBehaviour
 
         foreach (Button button in agentButtonsList)
         {
-            if (PlayerStats.Instance.currentMoney < priceList[i])
+            if (PlayerStats.Instance.currentGold < priceList[i])
             {
                 if (button.interactable == true)
                     button.interactable = false;
@@ -113,7 +121,5 @@ public class UnitesMenu : NetworkBehaviour
         {
             playerStats.goldChanged -= UpdateButtons;
         }
-        else
-            Debug.LogWarning("Can't Unsub goldChanged event" + this);
     }
 }

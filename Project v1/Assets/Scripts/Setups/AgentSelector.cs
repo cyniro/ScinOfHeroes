@@ -6,17 +6,6 @@ using UnityEngine.UI;
 
 public class AgentSelector : MonoBehaviour
 {
-
-    #region Singleton
-    public static AgentSelector Instance;
-
-    private void Awake()
-    {
-        Instance = this;
-    }
-    #endregion
-
-
     [System.Serializable]
     public class ButtonClass
     {
@@ -25,6 +14,17 @@ public class AgentSelector : MonoBehaviour
         public bool clicked = false;
     }
 
+    #region Singleton
+    public static AgentSelector Instance;
+
+    private void Awake()
+    {
+        if (Instance != null)
+            Destroy(this);
+
+        Instance = this;
+    }
+    #endregion
 
     [HideInInspector]
     public List<GameObject> selectedAgents = new List<GameObject>();
@@ -38,8 +38,6 @@ public class AgentSelector : MonoBehaviour
     {
         DontDestroyOnLoad(this.gameObject);
     }
-
-
 
     public void SelectAgent(GameObject agentToSelect)
     {
@@ -56,9 +54,6 @@ public class AgentSelector : MonoBehaviour
         }
 
     }
-
-
-
 
     public void ChangeButtonState(int button)
     {

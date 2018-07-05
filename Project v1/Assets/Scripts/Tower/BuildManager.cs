@@ -26,7 +26,7 @@ public class BuildManager : MonoBehaviour {
     private Node selectedNode;
 
     public bool CanBuild { get { return turretToBuild != null; } }
-    public bool HasMoney { get { return PlayerStats.Instance.currentMoney >= turretToBuild.cost; } }
+    public bool HasMoney { get { return PlayerStats.Instance.currentGold >= turretToBuild.cost; } }
 
     public void SelectNode (Node node)
     {
