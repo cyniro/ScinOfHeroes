@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 4656596918866088}
   - component: {fileID: 114805938462584238}
   - component: {fileID: 135782720355920450}
+  - component: {fileID: 114481134441172276}
   m_Layer: 2
   m_Name: StandardTurret_Upgraded
   m_TagString: Tower
@@ -489,8 +490,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3861c2144906ba648ae75571088ac20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageableBehaviour: {fileID: 114805938462584238}
   healthBar: {fileID: 4457382730123728}
   backgroundBar: {fileID: 4282075691796500}
+  showWhenFull: 0
+--- !u!114 &114481134441172276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1320154678737502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bedb499532af5b74aa2777440835fc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageableBehaviour: {fileID: 114805938462584238}
+  deathParticleSystemPrefab: {fileID: 198232752115774918, guid: 6a6902dc07357d746b7a76ceeea6e25a,
+    type: 2}
+  deathEffectOffset: {x: 0, y: 0, z: 0}
+  anim: {fileID: 0}
 --- !u!114 &114805938462584238
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -502,9 +521,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d85dd7a4123244cb5703b803693a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHealth: 100
-  normalizedHealth: 0
-  towerDeathEffect: {fileID: 0}
+  configuration:
+    resistance: 0
+    baseResistance: 0
+    startingHealth: 100
+    lootValue: 50
+  startingHealth: 100
   targetter: {fileID: 0}
   fireRate: 1.5
   bulletPrefab: {fileID: 1267483021203456, guid: b851f6fc584cefa449a0301acb85a3ab,

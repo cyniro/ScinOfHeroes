@@ -12,7 +12,7 @@ public class Mage3rdSkill : Skills
     {
         base.Update();
 
-        if (skill == skill.dispo && hero.health <= hero.startingHealth/3)
+        if (skill == skill.dispo && hero.configuration.currentHealth <= hero.configuration.startingHealth/3)
         {
             ActiveSkill();
         }

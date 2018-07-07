@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4766181054895490}
   - component: {fileID: 198232752115774918}
   - component: {fileID: 199096004832918662}
+  - component: {fileID: 114377551937974922}
   m_Layer: 0
   m_Name: CraillouxDeathEffect
   m_TagString: Untagged
@@ -41,6 +42,24 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114377551937974922
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1889897949588580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94c18e73c59bc34b962d352c8568798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyAfterAnimation: 0
+  time: 5
+  death:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!198 &198232752115774918
 ParticleSystem:
   m_ObjectHideFlags: 1

@@ -14,14 +14,14 @@ public class Garen2ndSkill : Skills
     protected override void OnEnable()
     {
         base.OnEnable();
-        hero.takeDamageAction += ActiveSkill;
+        hero.hit += ActiveSkill;
         cdEnd += ResetSkill;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        hero.takeDamageAction -= ActiveSkill;
+        hero.hit -= ActiveSkill;
         cdEnd -= ResetSkill;
     }
 
@@ -30,7 +30,6 @@ public class Garen2ndSkill : Skills
     {
         hero.RemoveBuff("GarenShield", damageReduction, BuffType.ResistanceBoost);
         hero.RemoveFx(shieldEffect);
-        //shieldEffect.SetActive(false);
     }
 
 
@@ -41,7 +40,6 @@ public class Garen2ndSkill : Skills
             skill = skill.actif;
             hero.AddBuff("GarenShield", damageReduction, BuffType.ResistanceBoost);
             hero.SetFx(shieldEffect);
-            //shieldEffect.SetActive(true);
         }
     }
 

@@ -19,40 +19,34 @@ public class Peons : Unite
     private bool backing;
     private int peonToDisable = 0;
     private GameObject _buildingTower;// ajouter au blueprint
-    [SerializeField]
-    private Alignement m_Alignement;
 
     public Transform home;
     public List<GameObject> peons;
     public GameObject buildingTower;//  ajouter au blueprint
-
-    /// <summary>
-    /// Gets this unit's original movement speed
-    /// </summary>
-    public float originalMovementSpeed { get; private set; }
+    public Alignement alignement;
 
     protected override void Awake()
     {
+        base.Awake();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        originalMovementSpeed = navMeshAgent.speed;
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         navMeshAgent = GetComponent<NavMeshAgent>();
         building = false;
         onTheWay = false;
         constructionSpeed = 0.25f;
         peonsAlive = 4;
         constructedPoints = 0f;
-        peonActualLife = startingHealth;
+        peonActualLife = configuration.startingHealth;
         _buildingTower = null;
         peonToDisable = 0;
         backing = false;
 
         navMeshAgent.enabled = false;
         navMeshAgent.enabled = true;
-        originalMovementSpeed = navMeshAgent.speed;
 
         for (int i = 0; i < peons.Count; i++)
         {
@@ -129,35 +123,30 @@ public class Peons : Unite
         if (peonActualLife <= 0)
         {
             peonsAlive -= 1;
-            peonActualLife = m_StartingHealth;
+            peonActualLife = configuration.startingHealth;
 
             if (peonsAlive <= 0)
             {
-                OnRemove();
+                Remove();
                 return;
             }
             peons[peonToDisable].SetActive(false);
             peonToDisable++;
         }
     }
-    public override Alignement GetAlignement()
-    {
-        return m_Alignement;
-    }
 
-    protected override void OnRemove()
+    public override void Remove()
     {
-        base.OnRemove();
+        base.Remove();
         if (_buildingTower != null)
             PoolManager.Instance.poolDictionnary[_buildingTower.name].UnSpawnObject(_buildingTower);
 
         nodeDestination.EnableConstruction();
-        PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
     }
 
     public override void Heal(float amount)
     {
-        peonActualLife = Mathf.Min(peonActualLife + amount, startingHealth);
+        peonActualLife = Mathf.Min(peonActualLife + amount, configuration.startingHealth);
     }
 
     public void CancelBuilding()
@@ -169,5 +158,10 @@ public class Peons : Unite
         navMeshAgent.destination = home.position;
         backing = true;
         onTheWay = false;
+    }
+
+    public override Alignement GetAlignement()
+    {
+        return alignement;
     }
 }

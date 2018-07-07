@@ -10,16 +10,16 @@ public class Hero : Unite
 
     public List<Skills> skills;
 
+
     private void Start()
     {
         InitPool();
 
-
+        HeroUI.Instance.hero = this;
+        HeroUI.Instance.Init();
 
         // if client authority
         //a modifier 
-        HeroUI.Instance.hero = this;
-        HeroUI.Instance.Init();
     }
 
     private void InitPool()
@@ -29,10 +29,8 @@ public class Hero : Unite
         Debug.Log("GameManager2.Instance.playerInGameScene = " + GameManager2.Instance.playerInGameScene);
     }
 
-    protected override void Die()
+    protected override void OnConfigurationDied()
     {
-        isDead = true;
-
         for (int i = 0; i < transform.childCount; i++)
         {
             GameObject child = transform.GetChild(i).gameObject;
@@ -44,6 +42,6 @@ public class Hero : Unite
         gameObject.GetComponent<HeroMovement>().enabled = false;
         gameObject.transform.position = new Vector3(-500, -500, -500);
 
-
+        ResetUnit();
     }
 }

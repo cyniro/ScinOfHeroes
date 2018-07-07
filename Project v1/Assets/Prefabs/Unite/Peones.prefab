@@ -28,38 +28,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1512606436992434
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4045575678054086}
-  - component: {fileID: 108965899209550994}
-  m_Layer: 0
-  m_Name: SpeedEffect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!1 &1556673306734000
-GameObject:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4436426955209766}
-  - component: {fileID: 108451044954297804}
-  m_Layer: 0
-  m_Name: HealingEffect
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
 --- !u!1 &1579795962894782
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,21 +57,6 @@ GameObject:
   - component: {fileID: 23359012357908660}
   m_Layer: 0
   m_Name: "P\xE9on (1)"
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &1650757349277874
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 4774592621026876}
-  m_Layer: 0
-  m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,19 +98,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4045575678054086
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1512606436992434}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4774592621026876}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4216696520100470
 Transform:
   m_ObjectHideFlags: 1
@@ -170,19 +110,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4963589887962672}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4436426955209766
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1556673306734000}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4774592621026876}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4761353091353810
 Transform:
@@ -209,21 +136,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4963589887962672}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4774592621026876
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1650757349277874}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4436426955209766}
-  - {fileID: 4045575678054086}
-  m_Father: {fileID: 4963589887962672}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4939671186634736
 Transform:
@@ -252,7 +164,6 @@ Transform:
   - {fileID: 4771058919164182}
   - {fileID: 4216696520100470}
   - {fileID: 4761353091353810}
-  - {fileID: 4774592621026876}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -447,78 +358,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.3, y: 1, z: 2.3}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!108 &108451044954297804
-Light:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1556673306734000}
-  m_Enabled: 1
-  serializedVersion: 8
-  m_Type: 2
-  m_Color: {r: 0, g: 1, b: 0.21379304, a: 1}
-  m_Intensity: 5
-  m_Range: 10
-  m_SpotAngle: 30
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_Lightmapping: 4
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
---- !u!108 &108965899209550994
-Light:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1512606436992434}
-  m_Enabled: 1
-  serializedVersion: 8
-  m_Type: 2
-  m_Color: {r: 0.862069, g: 1, b: 0, a: 1}
-  m_Intensity: 5
-  m_Range: 10
-  m_SpotAngle: 30
-  m_CookieSize: 10
-  m_Shadows:
-    m_Type: 0
-    m_Resolution: -1
-    m_CustomResolution: -1
-    m_Strength: 1
-    m_Bias: 0.05
-    m_NormalBias: 0.4
-    m_NearPlane: 0.2
-  m_Cookie: {fileID: 0}
-  m_DrawHalo: 0
-  m_Flare: {fileID: 0}
-  m_RenderMode: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_Lightmapping: 4
-  m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
-  m_ColorTemperature: 6570
-  m_UseColorTemperature: 0
-  m_ShadowRadius: 0
-  m_ShadowAngle: 0
 --- !u!114 &114370051948393700
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -530,26 +369,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0cdfe77d6aef444b532a0033a9e751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_StartingHealth: 40
+  configuration:
+    resistance: 0
+    startingHealth: 100
+    lootValue: 50
   m_FireRate: 1
   m_MovementSpeed: 10
-  m_Resistance: 0
+  m_CdBetweenSpawn: 60
   range: 1
   melee: 0
   meleeDamage: 0
-  normalizedHealth: 0
   targetter: {fileID: 0}
   icon: {fileID: 0}
   unitData: {fileID: 0}
   bulletPrefab: {fileID: 0}
-  lootValue: 0
-  CDBetweenSpawns: 0
   cost: 0
   appliedEffectScale: 1
   appliedEffectOffset: {x: 0, y: 0, z: 0}
-  deathEffect: {fileID: 0}
-  m_Alignement: {fileID: 0}
   home: {fileID: 4120078837457102, guid: 359e00f62d5376e468aa995a2cf8d0db, type: 2}
   peons:
   - {fileID: 1579795962894782}
@@ -558,6 +394,7 @@ MonoBehaviour:
   - {fileID: 1508866528612380}
   buildingTower: {fileID: 1327081418895384, guid: 0b30bfae4534a604dbb69ec3e32afd51,
     type: 2}
+  alignement: {fileID: 11400000, guid: cb4c44286a20f674a938c5e23b1c92fe, type: 2}
 --- !u!195 &195069365555855046
 NavMeshAgent:
   m_ObjectHideFlags: 1

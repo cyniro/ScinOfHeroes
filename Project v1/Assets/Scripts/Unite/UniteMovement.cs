@@ -11,12 +11,12 @@ public class UniteMovement : MonoBehaviour
     private int wavePointIndex = 0;
  
 
-    private Unite enemy;
+    private Unite unit;
 
 
     void OnEnable()
     {
-        enemy = GetComponent<Unite>();
+        unit = GetComponent<Unite>();
 
         target = Waypoints.points[0];
 
@@ -27,14 +27,12 @@ public class UniteMovement : MonoBehaviour
 void Update()
     {
         Vector3 dir = target.position - transform.position;
-        transform.Translate(dir.normalized * enemy.movementSpeed * Time.deltaTime, Space.World);
+        transform.Translate(dir.normalized * unit.movementSpeed * Time.deltaTime, Space.World);
 
         if (Vector3.Distance(transform.position, target.position) <= 1f)
         {
             GetNextWaypoint();
         }
-
-        //enemy.speed = enemy.startSpeed;
     }
 
 
@@ -54,9 +52,7 @@ void Update()
     void EndPath()
     {
         PlayerStats.Instance.DecreaseLife();
-        WaveSpawner.EnemiesAlive--;
 
-        
-        PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
+        unit.Remove();
     }
 }

@@ -2,75 +2,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class Towers : MonoBehaviour, IDamageable
+public class Towers : DamageableBehaviour, IDamageable
 {
-    [Header("Stats")]
-    public float startHealth = 100f;
-    private float health;
-    private bool isDead;
-
-    [HideInInspector]
-    public float normalizedHealth;
-
-    [Header("Effects")]
-    public GameObject towerDeathEffect;
-    //public GameObject speedEffect;
-    //public GameObject healEffect;
-
-    //private Dictionary<string, GameObject> effectDictionnary;
-    private EnemyHealthBar towerHealthBar; // rename EnemyHealthBar to heatlhBar
 
     [Header("Setup")]
     public Targetter targetter;
 
-    /// <summary>
-    /// Event that is fired when this instance is removed, such as when pooled or destroyed
-    /// </summary>
-    public event Action<GameObject> removed;
-
-
-    protected virtual void OnEnable()
+    protected virtual void Start()
     {
-        isDead = false;
-        health = startHealth;
-        towerHealthBar = GetComponentInChildren<EnemyHealthBar>();
-        normalizedHealth = health / startHealth;
-        towerHealthBar.UpdateEnnemyHealth(normalizedHealth);
-    }
-
-    protected virtual void OnDisable()
-    {
-
-    }
-
-    public Alignement GetAlignement()
-    {
-        return targetter.alignement;
-    }
-
-    public void TakeDamage(float amount)
-    {
-        health -= amount;
-        normalizedHealth = health / startHealth;
-        towerHealthBar.UpdateEnnemyHealth(normalizedHealth);
-
-        if (health <= 0 && !isDead)
-        {
-            Die();
-        }
-    }
-
-
-    public void Heal(float amount)
-    {
-        if (health + amount <= startHealth)
-            health += amount;
-        else
-            health = startHealth;
-
-        normalizedHealth = health / startHealth;
-        towerHealthBar.UpdateEnnemyHealth(normalizedHealth);
+        //This is for test purpose, normally this shoud be done via the script that build this tower
+        configuration.SetHealth(configuration.startingHealth);
     }
 
     /// <summary>
@@ -80,22 +23,6 @@ public class Towers : MonoBehaviour, IDamageable
     {
         Debug.LogWarning("Towers dont have EffectFxList, you dumbass !!!");
         return null;
-    }
-
-
-    protected virtual void Die()
-    {
-        isDead = true;
-
-        if (removed != null)
-        {
-            removed(this.gameObject);
-        }
-
-        GameObject towerDeathEffectInst = PoolManager.Instance.poolDictionnary[towerDeathEffect.name].GetFromPool(transform.position);
-        towerDeathEffectInst.transform.rotation = transform.rotation;
-
-        PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
     }
 
     /// <summary>
@@ -112,9 +39,18 @@ public class Towers : MonoBehaviour, IDamageable
         return null;
     }
 
+    protected virtual void OnDisable()
+    {
 
-#region IDamageable Methode Useless
-public void AddBuff(string buffName, float value, BuffType buffType)
+    }
+
+    public Alignement GetAlignement()
+    {
+        return targetter.alignement;
+    }
+
+    #region IDamageable Methode Useless
+    public void AddBuff(string buffName, float value, BuffType buffType)
 {
     Debug.LogWarning("Towers dont get Buffs, you dumbass !!!");
 }

@@ -4,6 +4,19 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
 
+/*//////////////////////////////////////////////////////////
+ 
+     
+     HEY IF YOU SEE THAT THERE IS STILL WORK TO DO, CHECK BELLOW!
+
+    -LootValue is no perfect and should be in an other scrip
+    -add navmesh agent
+    -make a script attack
+     
+     ps: please
+     
+ /////////////////////////////////////////////////////////*/
+
 /// <summary>
 /// Type of the Buff can be
 /// </summary>
@@ -14,15 +27,11 @@ public enum BuffType
     MSBoost
 }
 
-public class Unite : MonoBehaviour, IDamageable
+public class Unite : DamageableBehaviour, IDamageable
 {
     #region Variables
 
-    private EnemyHealthBar enemyHealthBar;
-
     private float fireCountdown = 0f;
-
-    private float m_OriginalCd;
 
     /// <summary>
     /// Contains this unit's AsBoost buffs and there values 
@@ -42,38 +51,21 @@ public class Unite : MonoBehaviour, IDamageable
     /// </summary>
     protected List<GameObject> effectFxList;
 
-    protected float m_Health;
-    protected bool isDead = false;
 
     /// <summary>
     /// use to check if this unit is on CD
     /// </summary>
     protected bool m_IsInCD;
 
-    /// <summary>
-    /// Event that is fired when this instance is removed, such as when pooled or destroyed
-    /// </summary>
-    public event Action<GameObject> removed;
-
-    public UnityAction takeDamageAction;
     public UnityAction attackAction;
 
-    /// <summary>
-    /// Will get in UnitConfiguration later On; the scriptableObject we need to discuss of ;)
-    /// </summary>
-    public string Unitname;
-
     [Header("Stats")]
-    [SerializeField]
-    protected float m_StartingHealth = 100f;
     [SerializeField]
     protected float m_FireRate = 1f;
     [SerializeField]
     private float m_MovementSpeed = 10f;
     [SerializeField]
-    private float m_Resistance = 0f;
-    [SerializeField]
-    protected float m_CdBetweenSpawn;
+    protected float m_CdBetweenSpawn = 60;
 
     public bool range = false;
     public bool melee = false;
@@ -81,15 +73,11 @@ public class Unite : MonoBehaviour, IDamageable
     [SerializeField]
     protected int meleeDamage; //auto attack damage, must be ignored if range , faire un CustomEditor (https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html) pour hide/show ref suivant le bool
 
-    [HideInInspector]
-    public float normalizedHealth;
-
     [Header("Setup")]
     public Targetter targetter;
     public Sprite icon;
     public UnitData unitData;
     public GameObject bulletPrefab; // must be ignored if melee ,  faire un CustomEditor (https://docs.unity3d.com/ScriptReference/Editor.OnInspectorGUI.html) pour hide/show ref suivant le bool
-    public int lootValue = 50;
     public int cost;
     /// <summary>
     /// Scale adjustment for an applied affect
@@ -99,16 +87,9 @@ public class Unite : MonoBehaviour, IDamageable
     /// Position offset for an applied affect
     /// </summary>
     public Vector3 appliedEffectOffset = Vector3.zero;
-
-    public GameObject deathEffect;
-
     #endregion
 
     #region Proprieties
-    /// <summary>
-    /// Gets this unit's original Resistance
-    /// </summary>
-    public float baseResistance { get; private set; }
 
     /// <summary>
     /// Gets this unit's original movement speed
@@ -126,16 +107,8 @@ public class Unite : MonoBehaviour, IDamageable
     public float cDBetweenSpawns
     {
         get { return m_CdBetweenSpawn; }
-        set { }
     }
 
-    /// <summary>
-    /// Return the Amount of this unit's starting health
-    /// </summary>
-    public float startingHealth
-    {
-        get { return m_StartingHealth; }
-    }
 
     /// <summary>
     /// Gets this unit's movement speed
@@ -150,10 +123,6 @@ public class Unite : MonoBehaviour, IDamageable
         get { return anim; }
     }
 
-    public float health
-    {
-        get { return m_Health; }
-    }
 
     public float fireRate
     {
@@ -212,8 +181,9 @@ public class Unite : MonoBehaviour, IDamageable
     }
     #endregion
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         LazyLoad();
     }
 
@@ -222,9 +192,8 @@ public class Unite : MonoBehaviour, IDamageable
     /// </summary>
     protected virtual void LazyLoad()
     {
-        m_OriginalCd = m_CdBetweenSpawn;
+        configuration.died += ResetUnit;
         baseMovementSpeed = m_MovementSpeed;
-        baseResistance = m_Resistance;
         basefireRate = m_FireRate;
         aSBoostsDictionary = new Dictionary<string, List<float>>();
         mSBoostsDictionary = new Dictionary<string, List<float>>();
@@ -232,16 +201,10 @@ public class Unite : MonoBehaviour, IDamageable
         effectFxList = new List<GameObject>();
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         LazyLoad();
-        m_Health = m_StartingHealth;
-        enemyHealthBar = GetComponentInChildren<EnemyHealthBar>();
-        isDead = false;
-        normalizedHealth = health / m_StartingHealth;
-        enemyHealthBar.UpdateEnnemyHealth(normalizedHealth);
     }
-
 
     protected virtual void Update()
     {
@@ -284,33 +247,6 @@ public class Unite : MonoBehaviour, IDamageable
         {
             targetter.targetEnemy.TakeDamage(meleeDamage);
         }
-    }
-
-    public virtual void TakeDamage(float amount)
-    {
-        if (takeDamageAction != null)
-        {
-            takeDamageAction();
-        }
-
-        float effectivDamage = amount * (1 - m_Resistance);
-
-        m_Health -= effectivDamage;
-        normalizedHealth = health / m_StartingHealth;
-        enemyHealthBar.UpdateEnnemyHealth(normalizedHealth);
-
-        if (health <= 0 && !isDead)
-        {
-            Die();
-        }
-    }
-
-    /// <summary>
-    /// Reset the cd of this unit
-    /// </summary>
-    public void ResetCD()
-    {
-        m_CdBetweenSpawn = m_OriginalCd;
     }
 
     #region Buff & Fx
@@ -482,11 +418,11 @@ public class Unite : MonoBehaviour, IDamageable
                 {
                     if (!SearchAndDeleteEmptyEntry(resiBoostsDictionary))
                     {
-                        m_Resistance = baseResistance;
+                        configuration.resistance = configuration.baseResistance;
                     }
                     else
                     {
-                        float m_ResBuffs = baseResistance;
+                        float m_ResBuffs = configuration.baseResistance;
                         foreach (KeyValuePair<string, List<float>> resBuff in resiBoostsDictionary)
                         {
                             float max = 0;
@@ -496,7 +432,7 @@ public class Unite : MonoBehaviour, IDamageable
                             }
                             m_ResBuffs += (1 - m_ResBuffs) / (1 / max);
                         }
-                        m_Resistance = m_ResBuffs;
+                        configuration.resistance = m_ResBuffs;
                     }
                 }
                 break;
@@ -579,51 +515,30 @@ public class Unite : MonoBehaviour, IDamageable
 
     #endregion
 
-    protected virtual void Die()
-    {
-        isDead = true;
-
-        OnRemove();
-
-        aSBoostsDictionary = null;
-        resiBoostsDictionary = null;
-        mSBoostsDictionary = null;
-        effectFxList = null;
-
-        GameObject deathEffectInst = PoolManager.Instance.poolDictionnary[deathEffect.name].GetFromPool(transform.position);
-        deathEffectInst.transform.rotation = transform.rotation;
-
-        PlayerStats.Instance.ChangeGold(lootValue);
-
-        WaveSpawner.EnemiesAlive--;
-
-        PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
-    }
-
-    /// <summary>
-    /// Use to fire the remove event
-    /// </summary>
-    protected virtual void OnRemove()
-    {
-        if (removed != null)
-        {
-            removed(this.gameObject);
-        }
-    }
-
     public virtual Alignement GetAlignement()
     {
         return targetter.alignement;
     }
 
-    public virtual void Heal(float amount)
+    /// <summary>
+    /// Reset this unit
+    /// </summary>
+    public override void Remove()
     {
-        if (health + amount <= m_StartingHealth)
-            m_Health += amount;
-        else
-            m_Health = m_StartingHealth;
+        base.Remove();
+        ResetUnit();
+    }
 
-        normalizedHealth = health / m_StartingHealth;
-        enemyHealthBar.UpdateEnnemyHealth(normalizedHealth);
+    /// <summary>
+    /// This will null some stuff
+    /// </summary>
+    protected void ResetUnit()
+    {
+        configuration.died -= ResetUnit;
+
+        aSBoostsDictionary = null;
+        resiBoostsDictionary = null;
+        mSBoostsDictionary = null;
+        effectFxList = null;
     }
 }

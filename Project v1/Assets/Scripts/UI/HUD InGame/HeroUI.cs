@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class HeroUI : MonoBehaviour
 {
-
-
     #region Singleton
+
+    private bool initialized = false;
 
     public static HeroUI Instance;
 
@@ -25,7 +25,6 @@ public class HeroUI : MonoBehaviour
 
     #endregion
 
-
     public List<Image> images;
     public List<Text> texts;
     public Button ultimateButton;
@@ -37,6 +36,8 @@ public class HeroUI : MonoBehaviour
 
     public void Init()
     {
+        initialized = true;
+
         for (int i = 0; i < hero.skills.Count; i++)
         {
             images[i].sprite = hero.skills[i].UISprite;
@@ -51,28 +52,29 @@ public class HeroUI : MonoBehaviour
         }
     }
 
-
-
-
     private void Update()
     {
-        for (int i = 0; i < hero.skills.Count; i++)
+        if (initialized)
         {
-            if (hero.skills[i].Skill == skill.inCD)
+            for (int i = 0; i < hero.skills.Count; i++)
             {
-                texts[i].text = string.Format("{0:00.00}", hero.skills[i].returnCD);
+                if (hero.skills[i].Skill == skill.inCD)
+                {
+                    texts[i].text = string.Format("{0:00.00}", hero.skills[i].returnCD);
+                }
+            }
+
+            if (ultimateButton.interactable == true && ultimate.Skill != skill.dispo)
+            {
+                ultimateButton.interactable = false;
+            }
+
+
+            if (ultimateButton.interactable == false && ultimate.Skill == skill.dispo)
+            {
+                ultimateButton.interactable = true;
             }
         }
 
-        if (ultimateButton.interactable == true && ultimate.Skill != skill.dispo)
-        {
-            ultimateButton.interactable = false;
-        }
-
-
-        if (ultimateButton.interactable == false && ultimate.Skill == skill.dispo)
-        {
-            ultimateButton.interactable = true;
-        }
     }
 }

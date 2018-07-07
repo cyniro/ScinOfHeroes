@@ -8,7 +8,6 @@ using UnityEngine;
 
     -Clean the mess and add summaries on you methodes and variables
     -Check if all team's members are okay with the Heal Coroutine( instant heal of wait healRate)
-    -Back to pool pour les effet de RemoveFx()
      
      ps: please
      
@@ -64,9 +63,8 @@ public class SupportTower : Towers, IDamageable
     /// </summary>
     private List<GameObject> alliesInRange = new List<GameObject>();
 
-    protected override void OnEnable()
+    protected virtual void OnEnable()
     {
-        base.OnEnable();
         targetter.allieEnterRange += OnFriendEnterRange;
         targetter.allieExitRange += OnFriendExitRange;
     }
@@ -304,10 +302,5 @@ public class SupportTower : Towers, IDamageable
                 }
                 break;
         }
-    }
-
-    protected override void Die()
-    {
-        base.Die();
     }
 }

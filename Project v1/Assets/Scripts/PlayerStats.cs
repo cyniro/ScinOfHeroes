@@ -37,7 +37,7 @@ public class PlayerStats : MonoBehaviour
     /// <summary>
     /// The controller for gaining currency
     /// </summary>
-    public CurrencyGainer currencyGainer;
+    public FloatIncreaser goldByTime;
 
     private int m_CurrentGold;
     private int m_CurrentHealth;
@@ -61,9 +61,9 @@ public class PlayerStats : MonoBehaviour
     void Start()
     {
         Rounds = 0;
-        if (currencyGainer.IsActive)
+        if (goldByTime.IsActive)
         {
-            InvokeRepeating("MoneyOnTime", 0, currencyGainer.GainRate);
+            InvokeRepeating("MoneyOnTime", 0, goldByTime.GainRate);
         }
     }
 
@@ -121,6 +121,6 @@ public class PlayerStats : MonoBehaviour
 
     private void MoneyOnTime()
     {
-        ChangeGold(currencyGainer.constantCurrencyAddition);
+        ChangeGold(goldByTime.constantCurrencyAddition);
     }
 }

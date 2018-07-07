@@ -10,6 +10,15 @@ using UnityEngine.Networking;
 public class UnitMenu : MonoBehaviour
 {
     /// <summary>
+    /// a sctuct use to keep track of unit button's unit cd.
+    /// </summary>
+    private class UnitInCd
+    {
+        public UnitButton unitButton;
+        public float unitCd;
+    }
+
+    /// <summary>
     /// List of the Button that will be use to spawn Units
     /// </summary>
     public List<UnitButton> unitButtonList = new List<UnitButton>();
@@ -22,7 +31,7 @@ public class UnitMenu : MonoBehaviour
     /// <summary>
     /// Keet track of units in cd
     /// </summary>
-    private List<UnitButton> unitsInCD = new List<UnitButton>();
+    private List<UnitInCd> unitsInCD = new List<UnitInCd>();
 
     /// <summary>
     /// Use to catch the instance of PlayerStats on startu
@@ -89,7 +98,7 @@ public class UnitMenu : MonoBehaviour
         {
             empty.Add(i);
         }
-        for (int i = empty.Count -1; i >= 0 ; i--)
+        for (int i = empty.Count - 1; i >= 0; i--)
         {
             UnitButton unitButton = unitButtonList[empty[i]];
 
@@ -104,11 +113,7 @@ public class UnitMenu : MonoBehaviour
     /// <param name="unitButton">Contain all reference needed: button, unit, cd etc</param>
     public void OnClick(UnitButton unitButton)
     {
-        unitButton.unit.ResetCD();
-
         Cooldown(unitButton);
-
-        unitsInCD.Add(unitButton);
 
         Spawn(unitButton);
     }
@@ -124,22 +129,37 @@ public class UnitMenu : MonoBehaviour
 
         if (succesPurchase)
         {
-            foreach (NetworkPlayer player in NetworkManager.Instance.connectedPlayers)
+            if (NetworkManager.InstanceExists)
             {
-                if (player.hasAuthority)
+                foreach (NetworkPlayer player in NetworkManager.Instance.connectedPlayers)
                 {
-                    int indexUniteToSpawn = unitButton.agentSelectorIndex;
+                    if (player.hasAuthority)
+                    {
+                        int indexUniteToSpawn = unitButton.agentSelectorIndex;
+                        Vector3 positionToSpawn;
+                        if (player.spawnPoint != null)
+                        {
+                            positionToSpawn = player.spawnPoint.position;
+                        }
+                        else
+                        {
+                            Debug.LogWarning("player.spawnPoint is not set");
+                            positionToSpawn = defaultSpawnPoint.position;
+                        }
 
-                    if (player.spawnPoint != null)
-                    {
-                        player.CmdSpawnFromPool(indexUniteToSpawn, player.spawnPoint.position);
-                    }
-                    else
-                    {
-                        player.CmdSpawnFromPool(indexUniteToSpawn, defaultSpawnPoint.position);
-                        Debug.LogWarning("player.spawnPoint is not set");
+                        player.CmdSpawnFromPool(indexUniteToSpawn, positionToSpawn);
                     }
                 }
+            }
+            else
+            {
+                int indexUniteToSpawn = unitButton.agentSelectorIndex;
+                GameObject go = PoolManager.Instance.poolDictionnary
+                    [AgentSelector.Instance.selectedAgentsString[indexUniteToSpawn]].GetFromPool(defaultSpawnPoint.position);
+                go.transform.rotation = defaultSpawnPoint.rotation;
+
+                Unite unit = go.GetComponent<Unite>();
+                unit.configuration.SetHealth(unit.configuration.startingHealth);
             }
         }
     }
@@ -166,15 +186,16 @@ public class UnitMenu : MonoBehaviour
         }
         for (int i = 0; i < unitsInCD.Count; i++)
         {
-            UnitButton unitButton = unitsInCD[i];
+            UnitButton unitButton = unitsInCD[i].unitButton;
             Unite unit = unitButton.unit;
 
             if (unit.isInCD)
             {
                 unitButton.cdFillText.enabled = true;
                 unitButton.cdFillImage.enabled = true;
+
                 float cooldownNormalize = Time.deltaTime / unit.cDBetweenSpawns;
-                float cooldown = (unit.cDBetweenSpawns -= Time.deltaTime);
+                float cooldown = (unitsInCD[i].unitCd -= Time.deltaTime);
                 if (cooldown > 60)
                 {
                     string minutes = ((int)cooldown / 60).ToString("00");
@@ -189,7 +210,7 @@ public class UnitMenu : MonoBehaviour
                 unitButton.cdFillImage.fillAmount -= cooldownNormalize;
                 if (cooldown <= 0)
                 {
-                    Reset(unitButton);
+                    Reset(unitsInCD[i]);
                 }
             }
         }
@@ -216,7 +237,6 @@ public class UnitMenu : MonoBehaviour
         }
     }
 
-
     /// <summary>
     /// Call when button as been pressed, and set a cooldown on the button
     /// </summary>
@@ -226,18 +246,26 @@ public class UnitMenu : MonoBehaviour
         unitButton.cdFillImage.fillAmount = 1;
 
         unitButton.unit.isInCD = true;
+
+        UnitInCd unitInCd = new UnitInCd();
+        unitInCd.unitButton = unitButton;
+        unitInCd.unitCd = unitButton.unit.cDBetweenSpawns;
+
+        unitsInCD.Add(unitInCd);
     }
 
     /// <summary>
     /// Used to enable the Agent's purchasing after his cooldown is gone
     /// </summary>
-    public void Reset(UnitButton unitButton)
+    private void Reset(UnitInCd unitInCd)
     {
+        UnitButton unitButton = unitInCd.unitButton;
+
         unitButton.unit.isInCD = false;
         unitButton.cdFillText.enabled = false;
         unitButton.cdFillImage.enabled = false;
 
-        unitsInCD.Remove(unitButton);
+        unitsInCD.Remove(unitInCd);
 
         UpdateButtons();
     }

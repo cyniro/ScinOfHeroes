@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4704298810419588}
   - component: {fileID: 114657490252225650}
   m_Layer: 0
-  m_Name: EnnemyHealthBar
+  m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,6 +82,7 @@ GameObject:
   - component: {fileID: 4266612211162326}
   - component: {fileID: 114376544154723850}
   - component: {fileID: 135499082496004960}
+  - component: {fileID: 114945047184196100}
   m_Layer: 2
   m_Name: MissileLauncher_Upgraded
   m_TagString: Tower
@@ -488,9 +489,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d85dd7a4123244cb5703b803693a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHealth: 100
-  normalizedHealth: 0
-  towerDeathEffect: {fileID: 0}
+  configuration:
+    resistance: 0
+    baseResistance: 0
+    startingHealth: 100
+    lootValue: 50
+  startingHealth: 100
   targetter: {fileID: 0}
   fireRate: 0.4
   bulletPrefab: {fileID: 1864613213325116, guid: 15c71fce6b882d344b4903cf46d52a0d,
@@ -506,8 +510,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3861c2144906ba648ae75571088ac20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageableBehaviour: {fileID: 114376544154723850}
   healthBar: {fileID: 4183022723683110}
   backgroundBar: {fileID: 4907513695247590}
+  showWhenFull: 0
+--- !u!114 &114945047184196100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1388031702054788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bedb499532af5b74aa2777440835fc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageableBehaviour: {fileID: 114376544154723850}
+  deathParticleSystemPrefab: {fileID: 198232752115774918, guid: 6a6902dc07357d746b7a76ceeea6e25a,
+    type: 2}
+  deathEffectOffset: {x: 0, y: 0, z: 0}
+  anim: {fileID: 0}
 --- !u!135 &135499082496004960
 SphereCollider:
   m_ObjectHideFlags: 1
