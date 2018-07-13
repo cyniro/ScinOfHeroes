@@ -2,6 +2,10 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+///////////////Need Work//////////////
+// Can add HealthChangeInfo script from TD template
+//////////////////////////////////////
+
 [Serializable]
 public class Damageable
 {
@@ -9,8 +13,27 @@ public class Damageable
     public float startingHealth = 100f;
     public int lootValue = 50;
 
+    /// <summary>
+    /// The alignment of the damager
+    /// </summary>
+    public SerializableIAlignmentProvider alignment;
+
     public Action healthChanged;
     public Action died;
+
+    //add a out info damage to check who killed this unit, v2
+    //HealthChangeInfo
+
+    /// <summary>
+    /// Gets the <see cref="IAlignmentProvider"/> of this instance
+    /// </summary>
+    public IAlignmentProvider alignmentProvider
+    {
+        get
+        {
+            return alignment != null ? alignment.GetInterface() : null;
+        }
+    }
 
     /// <summary>
     /// Gets the current health.
@@ -44,17 +67,22 @@ public class Damageable
         currentHealth = startingHealth;
     }
 
-    public virtual void TakeDamage(float amount)
+    public virtual void TakeDamage(float damage, IAlignmentProvider damageAlignment, out bool output)
     {
 
-        float effectivDamage = amount * (1 - resistance);
+        float effectivDamage = damage * (1 - resistance);
 
-        if (isDead)
+        bool canDamage = damageAlignment == null || alignmentProvider == null ||
+                 damageAlignment.CanHarm(alignmentProvider);
+
+        if (isDead || !canDamage)
         {
+            output = false;
             return;
         }
 
         ChangeHealth(-effectivDamage);
+        output = true;
 
         if (isDead)
         {

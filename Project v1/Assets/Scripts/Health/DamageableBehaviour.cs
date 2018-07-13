@@ -13,9 +13,25 @@ public class DamageableBehaviour : MonoBehaviour
     public Damageable configuration;
 
     /// <summary>
+    /// Gets whether this <see cref="DamageableBehaviour" /> is dead.
+    /// </summary>
+    /// <value>True if dead</value>
+    public bool isDead
+    {
+        get { return configuration.isDead; }
+    }
+
+    /// <summary>
+    /// The position of the transform
+    /// </summary>
+    public virtual Vector3 position
+    {
+        get { return transform.position; }
+    }
+    /// <summary>
     /// Event that is fired when this instance is removed, such as when pooled or destroyed
     /// </summary>
-    public event Action<GameObject> removed;
+    public event Action<DamageableBehaviour> removed;
 
     /// <summary>
     /// Event that is fired when this instance is killed
@@ -34,13 +50,17 @@ public class DamageableBehaviour : MonoBehaviour
         configuration.died += OnConfigurationDied;
     }
 
-    public virtual void TakeDamage(float amount)
+    public virtual void TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
     {
-        if (hit != null)
+        bool info;
+        configuration.TakeDamage(damageValue, alignment, out info);
+        if (info)
         {
-            hit();
+            if (hit != null)
+            {
+                hit();
+            }
         }
-        configuration.TakeDamage(amount);
     }
 
     public virtual void Heal(float amount)
@@ -53,7 +73,8 @@ public class DamageableBehaviour : MonoBehaviour
     /// </summary>
     protected virtual void Kill()
     {
-        configuration.TakeDamage(configuration.currentHealth);
+        bool info;
+        configuration.TakeDamage(configuration.currentHealth, null, out info);
     }
 
     /// <summary>
@@ -100,7 +121,7 @@ public class DamageableBehaviour : MonoBehaviour
     {
         if (removed != null)
         {
-            removed(this.gameObject);
+            removed(this);
         }
     }
 }

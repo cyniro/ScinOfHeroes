@@ -116,9 +116,9 @@ public class Peons : Unite
         building = true;
     }
 
-    public override void TakeDamage(float amount)
+    public override void TakeDamage(float damageValue, Vector3 damagePoint, IAlignmentProvider alignment)
     {
-        peonActualLife -= amount;
+        peonActualLife -= damageValue;
 
         if (peonActualLife <= 0)
         {
@@ -158,10 +158,5 @@ public class Peons : Unite
         navMeshAgent.destination = home.position;
         backing = true;
         onTheWay = false;
-    }
-
-    public override Alignement GetAlignement()
-    {
-        return alignement;
     }
 }

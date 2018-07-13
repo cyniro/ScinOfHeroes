@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine.Events;
 
-/*//////////////////////////////////////////////////////////
+/*///////////////////////////////Need WORK///////////////////////////
  
      
      HEY IF YOU SEE THAT THERE IS STILL WORK TO DO, CHECK BELLOW!
@@ -15,7 +15,7 @@ using UnityEngine.Events;
      
      ps: please
      
- /////////////////////////////////////////////////////////*/
+ ////////////////////////////////////////////////////////////////*/
 
 /// <summary>
 /// Type of the Buff can be
@@ -27,11 +27,11 @@ public enum BuffType
     MSBoost
 }
 
-public class Unite : DamageableBehaviour, IDamageable
+public class Unite : Targetable, IDamageable
 {
     #region Variables
 
-    private float fireCountdown = 0f;
+    //private float fireCountdown = 0f;
 
     /// <summary>
     /// Contains this unit's AsBoost buffs and there values 
@@ -208,45 +208,45 @@ public class Unite : DamageableBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        if (targetter.target == null)
-        {
-            return;
-        }
+        //if (targetter.target == null)
+        //{
+        //    return;
+        //}
 
-        targetter.LockOnTarget();
+        //targetter.LockOnTarget();
 
-        if (fireCountdown <= 0f)
-        {
-            Attack();
-            fireCountdown = 1f / m_FireRate;
-        }
+        //if (fireCountdown <= 0f)
+        //{
+        //    Attack();
+        //    fireCountdown = 1f / m_FireRate;
+        //}
 
-        fireCountdown -= Time.deltaTime;
+        //fireCountdown -= Time.deltaTime;
     }
 
     protected virtual void Attack()
     {
-        if (attackAction != null)
-        {
-            Debug.Log("fire attackAction");
-            attackAction();
-        }
+        //if (attackAction != null)
+        //{
+        //    Debug.Log("fire attackAction");
+        //    attackAction();
+        //}
 
-        if (range)
-        {
-            GameObject bulletGO = PoolManager.Instance.poolDictionnary[bulletPrefab.name].GetFromPool(targetter.firePoint.position);
-            bulletGO.transform.rotation = targetter.firePoint.rotation;
+        //if (range)
+        //{
+        //    GameObject bulletGO = PoolManager.Instance.poolDictionnary[bulletPrefab.name].GetFromPool(targetter.firePoint.position);
+        //    bulletGO.transform.rotation = targetter.firePoint.rotation;
 
-            Bullet bullet = bulletGO.GetComponent<Bullet>();
+        //    Bullet bullet = bulletGO.GetComponent<Bullet>();
 
-            if (bullet != null)
-                bullet.Seek(targetter.target);
-        }
+        //    if (bullet != null)
+        //        bullet.Seek(targetter.target);
+        //}
 
-        if (melee)
-        {
-            targetter.targetEnemy.TakeDamage(meleeDamage);
-        }
+        //if (melee)
+        //{
+        //    targetter.targetEnemy.TakeDamage(meleeDamage);
+        //}
     }
 
     #region Buff & Fx
@@ -514,11 +514,6 @@ public class Unite : DamageableBehaviour, IDamageable
     }
 
     #endregion
-
-    public virtual Alignement GetAlignement()
-    {
-        return targetter.alignement;
-    }
 
     /// <summary>
     /// Reset this unit

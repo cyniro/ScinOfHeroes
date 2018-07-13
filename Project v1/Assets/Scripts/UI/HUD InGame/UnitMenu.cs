@@ -189,29 +189,30 @@ public class UnitMenu : MonoBehaviour
             UnitButton unitButton = unitsInCD[i].unitButton;
             Unite unit = unitButton.unit;
 
-            if (unit.isInCD)
+            if (!unit.isInCD)
             {
-                unitButton.cdFillText.enabled = true;
-                unitButton.cdFillImage.enabled = true;
+                continue;
+            }
+            unitButton.cdFillText.enabled = true;
+            unitButton.cdFillImage.enabled = true;
 
-                float cooldownNormalize = Time.deltaTime / unit.cDBetweenSpawns;
-                float cooldown = (unitsInCD[i].unitCd -= Time.deltaTime);
-                if (cooldown > 60)
-                {
-                    string minutes = ((int)cooldown / 60).ToString("00");
-                    string seconds = ((int)cooldown % 60).ToString("00");
-                    if (seconds == "60")
-                        seconds = "00";
-                    unitButton.cdFillText.text = minutes + ":" + seconds;
-                }
-                else
-                    unitButton.cdFillText.text = cooldown.ToString("0");
+            float cooldownNormalize = Time.deltaTime / unit.cDBetweenSpawns;
+            float cooldown = (unitsInCD[i].unitCd -= Time.deltaTime);
+            if (cooldown > 60)
+            {
+                string minutes = ((int)cooldown / 60).ToString("00");
+                string seconds = ((int)cooldown % 60).ToString("00");
+                if (seconds == "60")
+                    seconds = "00";
+                unitButton.cdFillText.text = minutes + ":" + seconds;
+            }
+            else
+                unitButton.cdFillText.text = cooldown.ToString("0");
 
-                unitButton.cdFillImage.fillAmount -= cooldownNormalize;
-                if (cooldown <= 0)
-                {
-                    Reset(unitsInCD[i]);
-                }
+            unitButton.cdFillImage.fillAmount -= cooldownNormalize;
+            if (cooldown <= 0)
+            {
+                Reset(unitsInCD[i]);
             }
         }
     }

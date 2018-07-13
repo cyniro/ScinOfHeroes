@@ -471,6 +471,10 @@ MonoBehaviour:
     resistance: 0
     startingHealth: 100
     lootValue: 50
+    alignment:
+      unityObjectReference: {fileID: 11400000, guid: d753205af4d38104abce7c78ad1ab813,
+        type: 2}
+  targetTransform: {fileID: 4745885781575914}
   m_FireRate: 1
   m_MovementSpeed: 10
   m_CdBetweenSpawn: 1
