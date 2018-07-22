@@ -10,14 +10,14 @@ public class Garen3rdSkill : Skills   // actualy this skill is only for melee, l
     protected override void OnEnable()
     {
         base.OnEnable();
-        hero.attackAction += BoostThirdAttack;
+       // hero.attackAction += BoostThirdAttack;
         attackNumber = 0;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        hero.attackAction -= BoostThirdAttack;
+       // hero.attackAction -= BoostThirdAttack;
     }
 
 

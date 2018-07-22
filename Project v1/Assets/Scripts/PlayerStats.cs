@@ -3,23 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : Singleton<PlayerStats>
 {
-
-    #region Singleton
-    public static PlayerStats Instance;
-
-    private void Awake()
-    {
-        if (Instance != null)
-            Destroy(this);
-
-        Instance = this;
-        m_CurrentGold = startMoney;
-        m_CurrentHealth = startingHealth;
-    }
-    #endregion
-
     public static int Rounds;
 
     /// <summary>
@@ -57,6 +42,14 @@ public class PlayerStats : MonoBehaviour
     {
         get { return m_CurrentHealth; }
     }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        m_CurrentGold = startMoney;
+        m_CurrentHealth = startingHealth;
+    }
+
 
     void Start()
     {

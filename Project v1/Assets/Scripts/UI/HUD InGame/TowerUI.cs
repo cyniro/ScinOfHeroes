@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Towers;
 
 /// <summary>
 /// Controls the UI objects that draw the tower data

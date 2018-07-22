@@ -21,12 +21,12 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     public Transform[] projectilePoints;
 
     /// <summary>
-    /// The reference to the center point where the tower will search from
+    /// The reference to the center point where the enemy will search from
     /// </summary>
     public Transform epicenter;
 
     /// <summary>
-    /// Configuration for when the tower does splash damage
+    /// Configuration for when the affector can attack several targets
     /// </summary>
     public bool isMultiAttack;
 
@@ -44,7 +44,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     /// <summary>
     /// Gets the targetter
     /// </summary>
-    public Targetter towerTargetter;
+    public Targetter m_Targetter;
 
     /// <summary>
     /// Color of effect radius visualization
@@ -81,8 +81,8 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     /// </summary>
     public float searchRate
     {
-        get { return towerTargetter.searchRate; }
-        set { towerTargetter.searchRate = value; }
+        get { return m_Targetter.searchRate; }
+        set { m_Targetter.searchRate = value; }
     }
 
     /// <summary>
@@ -91,6 +91,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     public Targetable trackingEnemy
     {
         get { return m_TrackingEnemy; }
+        set { value = m_TrackingEnemy; }
     }
 
     /// <summary>
@@ -98,7 +99,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     /// </summary>
     public float effectRadius
     {
-        get { return towerTargetter.effectRadius; }
+        get { return m_Targetter.effectRadius; }
     }
 
     public Color effectColor
@@ -108,7 +109,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
 
     public Targetter targetter
     {
-        get { return towerTargetter; }
+        get { return m_Targetter; }
     }
 
     /// <summary>
@@ -127,16 +128,16 @@ public class AttackAffector : Affector, ITowerRadiusProvider
         base.Initialize(affectorAlignment, mask);
         SetUpTimers();
 
-        towerTargetter.ResetTargetter();
-        towerTargetter.alignment = affectorAlignment;
-        towerTargetter.acquiredTarget += OnAcquiredTarget;
-        towerTargetter.lostTarget += OnLostTarget;
+        m_Targetter.ResetTargetter();
+        m_Targetter.alignment = affectorAlignment;
+        m_Targetter.acquiredTarget += OnAcquiredTarget;
+        m_Targetter.lostTarget += OnLostTarget;
     }
 
     void OnDestroy()
     {
-        towerTargetter.acquiredTarget -= OnAcquiredTarget;
-        towerTargetter.lostTarget -= OnLostTarget;
+        m_Targetter.acquiredTarget -= OnAcquiredTarget;
+        m_Targetter.lostTarget -= OnLostTarget;
     }
 
     void OnLostTarget()
@@ -213,7 +214,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
 
         if (isMultiAttack)
         {
-            List<Targetable> enemies = towerTargetter.GetAllTargets();
+            List<Targetable> enemies = m_Targetter.GetAllTargets();
             m_Launcher.Launch(enemies, projectile, projectilePoints);
         }
         else
@@ -244,7 +245,7 @@ public class AttackAffector : Affector, ITowerRadiusProvider
     /// </summary>
     void OnDrawGizmosSelected()
     {
-        Gizmos.DrawWireSphere(epicenter.position, towerTargetter.effectRadius);
+        Gizmos.DrawWireSphere(epicenter.position, m_Targetter.effectRadius);
     }
 #endif
 }

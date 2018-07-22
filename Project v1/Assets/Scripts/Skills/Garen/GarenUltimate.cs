@@ -14,7 +14,7 @@ public class GarenUltimate : Skills {
         {
             Debug.Log("R been pressed !");
 
-            List<Targetable> targets = hero.targetter.GetAllTargets();
+            List<Targetable> targets = hero.AttackAffector.m_Targetter.GetAllTargets();
 
             foreach (Targetable target in targets)
             {

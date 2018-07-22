@@ -11,7 +11,7 @@ public class SpawnInstruction
     /// <summary>
     /// The agent to spawn - i.e. the monster for the wave
     /// </summary>
-    public Unite agentUnite;
+    public Unit agentUnit;
 
     /// <summary>
     /// The delay from the previous spawn until when this agent is spawned
@@ -22,5 +22,5 @@ public class SpawnInstruction
     /// <summary>
     /// The starting node, where the agent is spawned
     /// </summary>
-    public Transform startingNode;
+    public Node startingNode;
 }

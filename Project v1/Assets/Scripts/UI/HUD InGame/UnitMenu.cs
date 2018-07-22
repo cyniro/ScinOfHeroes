@@ -26,7 +26,7 @@ public class UnitMenu : MonoBehaviour
     /// <summary>
     /// If a SpawnPoint is no avaible, the spawnable units will spawn there
     /// </summary>
-    public Transform defaultSpawnPoint;
+    public Node defaultSpawnPoint;
 
     /// <summary>
     /// Keet track of units in cd
@@ -65,7 +65,7 @@ public class UnitMenu : MonoBehaviour
         {
             for (int i = 0; i < agentSelector.selectedAgents.Count; i++)
             {
-                Unite m_unit = AgentSelector.Instance.selectedAgents[i].GetComponent<Unite>();
+                Unit m_unit = AgentSelector.Instance.selectedAgents[i].GetComponent<Unit>();
                 UnitButton unitButton = unitButtonList[i];
 
                 unitButton.unitIcon.sprite = m_unit.icon;
@@ -144,7 +144,7 @@ public class UnitMenu : MonoBehaviour
                         else
                         {
                             Debug.LogWarning("player.spawnPoint is not set");
-                            positionToSpawn = defaultSpawnPoint.position;
+                            positionToSpawn = defaultSpawnPoint.transform.position;
                         }
 
                         player.CmdSpawnFromPool(indexUniteToSpawn, positionToSpawn);
@@ -154,12 +154,16 @@ public class UnitMenu : MonoBehaviour
             else
             {
                 int indexUniteToSpawn = unitButton.agentSelectorIndex;
-                GameObject go = PoolManager.Instance.poolDictionnary
-                    [AgentSelector.Instance.selectedAgentsString[indexUniteToSpawn]].GetFromPool(defaultSpawnPoint.position);
-                go.transform.rotation = defaultSpawnPoint.rotation;
+                Vector3 spawnPosition = defaultSpawnPoint.GetRandomPointInNodeArea();
 
-                Unite unit = go.GetComponent<Unite>();
-                unit.configuration.SetHealth(unit.configuration.startingHealth);
+                GameObject ally = PoolManager.Instance.poolDictionnary
+                    [AgentSelector.Instance.selectedAgentsString[indexUniteToSpawn]].GetFromPool(spawnPosition);
+
+                Unit unitAlly = ally.GetComponent<Unit>();
+                unitAlly.transform.position = spawnPosition;
+                unitAlly.Initialize();
+                unitAlly.SetNode(defaultSpawnPoint);
+                unitAlly.transform.rotation = defaultSpawnPoint.transform.rotation;
             }
         }
     }
@@ -187,7 +191,7 @@ public class UnitMenu : MonoBehaviour
         for (int i = 0; i < unitsInCD.Count; i++)
         {
             UnitButton unitButton = unitsInCD[i].unitButton;
-            Unite unit = unitButton.unit;
+            Unit unit = unitButton.unit;
 
             if (!unit.isInCD)
             {
@@ -222,20 +226,20 @@ public class UnitMenu : MonoBehaviour
     /// </summary>
     private void UpdateButtons()
     {
-        for (int i = 0; i < unitButtonList.Count; i++)
-        {
-            if (playerStats.CanAfford(unitButtonList[i].unit.cost) && !unitButtonList[i].buyButton.interactable)
-            {
-                if (!unitButtonList[i].unit.isInCD)
-                {
-                    unitButtonList[i].buyButton.interactable = true;
-                }
-            }
-            else if (!playerStats.CanAfford(unitButtonList[i].unit.cost) || unitButtonList[i].unit.isInCD && unitButtonList[i].buyButton.interactable)
-            {
-                unitButtonList[i].buyButton.interactable = false;
-            }
-        }
+        //for (int i = 0; i < unitButtonList.Count; i++)
+        //{
+        //    if (playerStats.CanAfford(unitButtonList[i].unit.cost) && !unitButtonList[i].buyButton.interactable)
+        //    {
+        //        if (!unitButtonList[i].unit.isInCD)
+        //        {
+        //            unitButtonList[i].buyButton.interactable = true;
+        //        }
+        //    }
+        //    else if (!playerStats.CanAfford(unitButtonList[i].unit.cost) || unitButtonList[i].unit.isInCD && unitButtonList[i].buyButton.interactable)
+        //    {
+        //        unitButtonList[i].buyButton.interactable = false;
+        //    }
+        //}
     }
 
     /// <summary>

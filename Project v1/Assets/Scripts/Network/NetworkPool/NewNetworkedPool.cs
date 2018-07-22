@@ -1,19 +1,15 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
 using System.Collections.Generic;
-
 
 public class NewNetworkedPool : MonoBehaviour
 {
     public int poolSize = 0;
-    public GameObject m_Prefab;
-    public List<GameObject> m_Pool = new List<GameObject>();
     public string poolName;
     public bool willGrow = true;
 
-
+    public GameObject m_Prefab;
+    public List<GameObject> m_Pool = new List<GameObject>();
     public NetworkHash128 assetId { get; set; }
 
     public delegate GameObject SpawnDelegate(Vector3 position, NetworkHash128 assetId);
@@ -32,11 +28,11 @@ public class NewNetworkedPool : MonoBehaviour
             obj.SetActive(false);
         }
 
-        if (m_Prefab.GetComponent<Unite>() != null)
+        if (m_Prefab.GetComponent<Unit>() != null)
         {
-            if (m_Prefab.GetComponent<Unite>().unitData != null)
+            if (m_Prefab.GetComponent<Unit>().unitData != null)
             {
-                foreach (GameObject go in m_Prefab.GetComponent<Unite>().unitData.objectToPool)
+                foreach (GameObject go in m_Prefab.GetComponent<Unit>().unitData.objectToPool)
                 {
                     if (PoolManager.Instance.poolDictionnary[go.name] != null)
                     {
@@ -50,10 +46,6 @@ public class NewNetworkedPool : MonoBehaviour
         }
         ClientScene.RegisterSpawnHandler(assetId, SpawnObject, UnSpawnObject);
     }
-
-
-
-   
 
     public GameObject GetFromPool(Vector3 position)
     {
@@ -73,13 +65,12 @@ public class NewNetworkedPool : MonoBehaviour
             //Debug.Log("Adding to the Pool and Activating GameObject " + m_Prefab.name + " at " + position);
             GameObject obj = (GameObject)Instantiate(m_Prefab);
             obj.transform.parent = this.transform;
-            m_Pool.Add(obj);
             obj.name = m_Prefab.name;
+            m_Pool.Add(obj);
             obj.transform.position = position;
             obj.SetActive(true);
             return obj;
         }
-
 
         Debug.LogError("Could not grab GameObject from pool, nothing available");
         return null;
@@ -95,6 +86,4 @@ public class NewNetworkedPool : MonoBehaviour
         //Debug.Log("Re-pooling GameObject " + spawned.name);
         spawned.SetActive(false);
     }
-
-    
 }

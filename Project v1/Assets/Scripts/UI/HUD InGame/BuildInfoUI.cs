@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Towers;
 
 /// <summary>
 /// A class that controls the information display 

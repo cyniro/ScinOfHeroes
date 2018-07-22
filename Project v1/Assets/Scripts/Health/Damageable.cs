@@ -115,10 +115,9 @@ public class Damageable
     public void SetHealth(float health)
     {
         currentHealth = health;
-        Debug.Log("SetHealth"+ this);
+
         if (healthChanged != null)
         {
-            Debug.Log("healthChanged SetHealth" + this);
             healthChanged();
         }
     }

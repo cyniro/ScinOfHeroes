@@ -1,52 +1,49 @@
 ﻿using UnityEngine;
 
-namespace ImplementWaveSpawner
+/// <summary>
+/// A wave implementation that triggers the waveCompleted event after an elapsed amount of time
+/// </summary>
+public class TimedWave : Wave
 {
     /// <summary>
-    /// A wave implementation that triggers the waveCompleted event after an elapsed amount of time
+    /// The time until the next wave is started
     /// </summary>
-    public class TimedWave : Wave
+    [Tooltip("The time until the next wave is started")]
+    public float timeToNextWave = 10f;
+
+    /// <summary>
+    /// The timer used to start the next wave
+    /// </summary>
+    protected Timer m_WaveTimer;
+
+    public override float progress
     {
-        /// <summary>
-        /// The time until the next wave is started
-        /// </summary>
-        [Tooltip("The time until the next wave is started")]
-        public float timeToNextWave = 10f;
+        get { return m_WaveTimer == null ? 0 : m_WaveTimer.normalizedProgress; }
+    }
 
-        /// <summary>
-        /// The timer used to start the next wave
-        /// </summary>
-        protected Timer m_WaveTimer;
+    /// <summary>
+    /// Initializes the Wave
+    /// </summary>
+    public override void Init()
+    {
+        base.Init();
 
-        public override float progress
+        if (spawnInstructions.Count > 0)
         {
-            get { return m_WaveTimer == null ? 0 : m_WaveTimer.normalizedProgress; }
+            m_WaveTimer = new Timer(timeToNextWave, SafelyBroadcastWaveCompletedEvent);
+            StartTimer(m_WaveTimer);
         }
+    }
 
-        /// <summary>
-        /// Initializes the Wave
-        /// </summary>
-        public override void Init()
+    /// <summary>
+    /// Handles spawning the current agent and sets up the next agent for spawning
+    /// </summary>
+    protected override void SpawnCurrent()
+    {
+        Spawn();
+        if (!TrySetupNextSpawn())
         {
-            base.Init();
-
-            if (spawnInstructions.Count > 0)
-            {
-                m_WaveTimer = new Timer(timeToNextWave, SafelyBroadcastWaveCompletedEvent);
-                StartTimer(m_WaveTimer);
-            }
-        }
-
-        /// <summary>
-        /// Handles spawning the current agent and sets up the next agent for spawning
-        /// </summary>
-        protected override void SpawnCurrent()
-        {
-            Spawn();
-            if (!TrySetupNextSpawn())
-            {
-                StopTimer(m_SpawnTimer);
-            }
+            StopTimer(m_SpawnTimer);
         }
     }
 }

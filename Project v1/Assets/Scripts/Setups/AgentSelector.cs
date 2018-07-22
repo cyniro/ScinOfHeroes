@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class AgentSelector : MonoBehaviour
 {
     [System.Serializable]
@@ -29,10 +28,7 @@ public class AgentSelector : MonoBehaviour
     [HideInInspector]
     public List<GameObject> selectedAgents = new List<GameObject>();
     public List<string> selectedAgentsString = new List<string>();
-
-
     public List<ButtonClass> agentSelectButtons = new List<ButtonClass>();
-
 
     private void Start()
     {
@@ -41,7 +37,6 @@ public class AgentSelector : MonoBehaviour
 
     public void SelectAgent(GameObject agentToSelect)
     {
-        
         if (selectedAgents.Contains(agentToSelect))
         {
             selectedAgents.Remove(agentToSelect);
@@ -52,7 +47,6 @@ public class AgentSelector : MonoBehaviour
             selectedAgents.Add(agentToSelect);
             selectedAgentsString.Add(agentToSelect.name);
         }
-
     }
 
     public void ChangeButtonState(int button)
@@ -67,6 +61,5 @@ public class AgentSelector : MonoBehaviour
             agentSelectButtons[button].imageButton.color = Color.red;
             agentSelectButtons[button].clicked = true;
         }
-
     }
 }

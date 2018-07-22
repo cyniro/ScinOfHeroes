@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using Towers;
+
 
 /// <summary>
 /// Tower placement "ghost" that indicates the position of the tower to be placed and its validity for placement.

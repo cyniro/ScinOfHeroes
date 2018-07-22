@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class PoolManager : MonoBehaviour
 {
-
-
     public Dictionary<string, NewNetworkedPool> poolDictionnary = new Dictionary<string, NewNetworkedPool>();
-
 
     #region Singleton
     public static PoolManager Instance;

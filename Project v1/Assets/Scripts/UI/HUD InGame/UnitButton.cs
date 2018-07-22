@@ -37,5 +37,5 @@ public class UnitButton : MonoBehaviour
     /// Use to store the unit script of the unit to get accès to his variables
     /// </summary>
     [HideInInspector]
-    public Unite unit;
+    public Unit unit;
 }

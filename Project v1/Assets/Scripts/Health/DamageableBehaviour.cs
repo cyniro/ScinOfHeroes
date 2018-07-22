@@ -98,7 +98,6 @@ public class DamageableBehaviour : MonoBehaviour
         //lootValue is automacly called for now when a unit die, it shoud be not call here.
         //So when this unit reach end path (enemy base) they will not give money to the enemy player
         //can make a scrip name Loot that subscrib to dameable.die event will resolve this problem
-        PlayerStats.Instance.ChangeGold(configuration.lootValue);
 
         PoolManager.Instance.poolDictionnary[gameObject.name].UnSpawnObject(gameObject);
     }

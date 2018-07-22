@@ -13,12 +13,12 @@ using UnityEngine;
      
  /////////////////////////////////////////////////////////*/
 /// <summary>
-/// Uses a trigger to attach and remove Buffs/Debuff and FX to Targetable
+/// Uses a trigger to Buffs/Debuff the unit and attacj/remove an FX
 /// </summary>
 public class SupportAffector : PassiveAffector
 {
     /// <summary>
-    /// This enum is used when a specific tower buff is set for a unit, to check if we Buffing it or remove it from
+    /// Enum use to specify if the action to do, buff the unit or remove a buff
     /// </summary>
     public enum BuffStat
     {
@@ -64,51 +64,49 @@ public class SupportAffector : PassiveAffector
     /// <summary>
     /// List used to keep track off allies in Range
     /// </summary>
-    private List<Targetable> alliesInRange = new List<Targetable>();
+    private List<Unit> alliesInRange = new List<Unit>();
 
+    /// <summary>
+    /// Sub to events
+    /// </summary>
     protected virtual void OnEnable()
     {
-        targetter.targetEntersRange += OnFriendEnterRange;
-        targetter.targetExitsRange += OnFriendExitRange;
+        targetter.allyEntersRange += OnFriendEnterRange;
+        targetter.allyExitsRange += OnFriendExitRange;
     }
 
+    /// <summary>
+    /// unSub events
+    /// </summary>
     protected void OnDisable()
     {
         StopAllCoroutines();
-        targetter.targetEntersRange -= OnFriendEnterRange;
-        targetter.targetExitsRange -= OnFriendExitRange;
+        targetter.allyEntersRange -= OnFriendEnterRange;
+        targetter.allyExitsRange -= OnFriendExitRange;
 
-        foreach (Targetable ally in alliesInRange)
+        foreach (Unit ally in alliesInRange)
         {
-            DamageableBehaviour m_allyDamageable = ally.GetComponent<DamageableBehaviour>();
-            RemoveAllBuffs(m_allyDamageable);
+            RemoveAllBuffs(ally);
         }
 
         alliesInRange.Clear();
     }
 
     /// <summary>
-    /// Fonction called when targetter spot an allie and trigger the allieEnterRange event
-    /// We check if the gameobject is nothing but and Unit/Hero/Peon then it's time to support
+    /// Fonction called when targetter spot an allie and trigger the allyEntersRange event
+    /// We check if the gameobject is nothing but and Unit/Hero/Peon then it's time to support it
     /// </summary>
-    /// <param name="ally">GameObject that enter the targetter's range</param>
-    private void OnFriendEnterRange(Targetable ally)
+    /// <param name="ally">Unit Ally that enter the targetter's range</param>
+    private void OnFriendEnterRange(Unit ally)
     {
-        if (ally.tag == "Tower")
-        {
-            return;
-        }
-
-        IDamageable m_UniteIDamageable = ally.GetComponent<IDamageable>();
-
-        if (m_UniteIDamageable == null)
+        if (ally == null || ally.isDead)
         {
             return;
         }
 
         alliesInRange.Add(ally);
 
-        m_UniteIDamageable.removed += RemoveAllBuffs;
+        ally.removed += RemoveAllBuffs;
 
         //play sound/particle effect on enter range
         if (enterParticleSystem != null)
@@ -124,55 +122,49 @@ public class SupportAffector : PassiveAffector
         if (healer && alliesInRange.Count <= 1)
         {
             StartCoroutine(Heal());
-            m_UniteIDamageable.SetFx(healFxPrefab);
+            ally.SetFx(healFxPrefab);
         }
         if (isMouvmentSpeedBooster)
         {
-            SetMsBuff(m_UniteIDamageable, BuffStat.Buff);
-            m_UniteIDamageable.SetFx(movementSpeedFxPrefab);
+            SetMsBuff(ally, BuffStat.Buff);
+            ally.SetFx(movementSpeedFxPrefab);
         }
         if (isResistanceBooster)
         {
-            SetResiBuff(m_UniteIDamageable, BuffStat.Buff);
-            m_UniteIDamageable.SetFx(resistanceFxPrefab);
+            SetResiBuff(ally, BuffStat.Buff);
+            ally.SetFx(resistanceFxPrefab);
         }
         if (isAttackSpeedBooster)
         {
-            SetASBuff(m_UniteIDamageable, BuffStat.Buff);
-            m_UniteIDamageable.SetFx(attackSpeedFxPrefab);
+            SetASBuff(ally, BuffStat.Buff);
+            ally.SetFx(attackSpeedFxPrefab);
         }
     }
 
     /// <summary>
-    /// Called by the targetter event when and allie exits his range
+    /// Called when the targetter event "allyExitsRange" is trigger:
+    /// Remove buff from it and remove it from the alliesInTangeList
     /// </summary>
     /// <param name="ally">the allie who has exit the range</param>
-    private void OnFriendExitRange(Targetable ally)
+    private void OnFriendExitRange(Unit ally)
     {
         alliesInRange.Remove(ally);
-        DamageableBehaviour m_allyDamageable = ally.GetComponent<DamageableBehaviour>();
-        RemoveAllBuffs(m_allyDamageable);
+        RemoveAllBuffs(ally);
     }
 
     /// <summary>
-    /// Removes all the buff and the ally
+    /// Removes all buffs on the ally,
     /// </summary>
     /// <param name="ally">the allie who is target by this methode</param>
     private void RemoveAllBuffs(DamageableBehaviour ally)
     {
-        if (ally.gameObject.tag == "Tower")
+        Unit m_Unit = ally.GetComponent<Unit>();
+        if (m_Unit == null)
         {
             return;
         }
 
-        IDamageable m_UniteDamageable = ally.gameObject.GetComponent<IDamageable>();
-
-        if (m_UniteDamageable == null)
-        {
-            return;
-        }
-
-        m_UniteDamageable.removed -= RemoveAllBuffs;
+        m_Unit.removed -= RemoveAllBuffs;
 
         if (healer)
         {
@@ -180,30 +172,30 @@ public class SupportAffector : PassiveAffector
             {
                 StopAllCoroutines();
             }
-            m_UniteDamageable.RemoveFx(healFxPrefab);
+            m_Unit.RemoveFx(healFxPrefab);
         }
         if (isMouvmentSpeedBooster)
         {
-            SetMsBuff(m_UniteDamageable, BuffStat.DeBuff);
-            if (!m_UniteDamageable.GetMSBoostsDictionary().ContainsKey("SupportTowerBuffMS"))
+            SetMsBuff(m_Unit, BuffStat.DeBuff);
+            if (!m_Unit.GetMSBoostsDictionary().ContainsKey("SupportTowerBuffMS"))
             {
-                m_UniteDamageable.RemoveFx(movementSpeedFxPrefab);
+                m_Unit.RemoveFx(movementSpeedFxPrefab);
             }
         }
         if (isResistanceBooster)
         {
-            SetResiBuff(m_UniteDamageable, BuffStat.DeBuff);
-            if (!m_UniteDamageable.GetResiBoostsDictionary().ContainsKey("SupportTowerBuffResi"))
+            SetResiBuff(m_Unit, BuffStat.DeBuff);
+            if (!m_Unit.GetResiBoostsDictionary().ContainsKey("SupportTowerBuffResi"))
             {
-                m_UniteDamageable.RemoveFx(resistanceFxPrefab);
+                m_Unit.RemoveFx(resistanceFxPrefab);
             }
         }
         if (isAttackSpeedBooster)
         {
-            SetASBuff(m_UniteDamageable, BuffStat.DeBuff);
-            if (!m_UniteDamageable.GetASBoostsDictionary().ContainsKey("SupportTowerBuffAS"))
+            SetASBuff(m_Unit, BuffStat.DeBuff);
+            if (!m_Unit.GetASBoostsDictionary().ContainsKey("SupportTowerBuffAS"))
             {
-                m_UniteDamageable.RemoveFx(attackSpeedFxPrefab);
+                m_Unit.RemoveFx(attackSpeedFxPrefab);
             }
         }
     }
@@ -219,19 +211,19 @@ public class SupportAffector : PassiveAffector
 
             foreach (Targetable ally in alliesInRange)
             {
-                IDamageable allieIDamageable = GetComponent<IDamageable>();
-                allieIDamageable.Heal(healAmount);
+                ally.Heal(healAmount);
             }
         }
     }
 
     /// <summary>
-    /// Fonction called to boost Resistance of an target allie
+    /// Fonction called to boost/unboost Resistance of an ally
     /// </summary>
-    /// <param name="UniteDamageable">The allie target we'r boosting</param>
-    private void SetResiBuff(IDamageable uniteDamageable, BuffStat state)
+    /// <param name="ally">the Unit that is buffed</param>
+    /// <param name="state">specify if it's a buff or a debuff</param>
+    private void SetResiBuff(Unit ally, BuffStat state)
     {
-        if (uniteDamageable == null)
+        if (ally == null || ally.isDead)
         {
             Debug.Log("Something wrong happened");
             return;
@@ -240,24 +232,25 @@ public class SupportAffector : PassiveAffector
         {
             case BuffStat.Buff:
                 {
-                    uniteDamageable.AddBuff("SupportTowerBuffResi", resModifier, BuffType.ResistanceBoost);
+                    ally.AddBuff("SupportTowerBuffResi", resModifier, BuffType.ResistanceBoost);
                 }
                 break;
             case BuffStat.DeBuff:
                 {
-                    uniteDamageable.RemoveBuff("SupportTowerBuffResi", resModifier, BuffType.ResistanceBoost);
+                    ally.RemoveBuff("SupportTowerBuffResi", resModifier, BuffType.ResistanceBoost);
                 }
                 break;
         }
     }
 
     /// <summary>
-    /// Fonction called to boost MS of an target allie
+    /// Fonction called to boost/unboost MovementSpeed of an ally
     /// </summary>
-    /// <param name="UniteDamageable">The allie target we'r boosting</param>
-    private void SetMsBuff(IDamageable uniteDamageable, BuffStat state)
+    /// <param name="ally">the Unit that is buffed/unbuffed</param>
+    /// <param name="state">specify if it's a buff or a debuff</param>
+    private void SetMsBuff(Unit ally, BuffStat state)
     {
-        if (uniteDamageable == null)
+        if (ally == null || ally.isDead)
         {
             Debug.Log("Something wrong happened");
             return;
@@ -266,25 +259,25 @@ public class SupportAffector : PassiveAffector
         {
             case BuffStat.Buff:
                 {
-                    uniteDamageable.AddBuff("SupportTowerBuffMS", mSModifier, BuffType.MSBoost);
+                    ally.AddBuff("SupportTowerBuffMS", mSModifier, BuffType.MSBoost);
                 }
                 break;
             case BuffStat.DeBuff:
                 {
-                    uniteDamageable.RemoveBuff("SupportTowerBuffMS", mSModifier, BuffType.MSBoost);
+                    ally.RemoveBuff("SupportTowerBuffMS", mSModifier, BuffType.MSBoost);
                 }
                 break;
         }
     }
 
     /// <summary>
-    /// Called to Buff/DeBuff an unit
+    /// Fonction called to boost/unboost AttackSpeed of an ally
     /// </summary>
-    /// <param name="uniteDamageable">unit target by the methode</param>
-    /// <param name="state">use to check if its a buff or a debuff</param>
-    private void SetASBuff(IDamageable uniteDamageable, BuffStat state)
+    /// <param name="ally">the Unit that is buffed/unbuffed</param>
+    /// <param name="state">specify if it's a buff or a debuff</param>
+    private void SetASBuff(Unit ally, BuffStat state)
     {
-        if (uniteDamageable == null)
+        if (ally == null || ally.isDead)
         {
             Debug.Log("Something wrong happened");
             return;
@@ -293,13 +286,13 @@ public class SupportAffector : PassiveAffector
         {
             case BuffStat.Buff:
                 {
-                    uniteDamageable.AddBuff("SupportTowerBuffAS", aSModifier, BuffType.ASBoost);
+                    ally.AddBuff("SupportTowerBuffAS", aSModifier, BuffType.ASBoost);
 
                 }
                 break;
             case BuffStat.DeBuff:
                 {
-                    uniteDamageable.RemoveBuff("SupportTowerBuffAS", aSModifier, BuffType.ASBoost);
+                    ally.RemoveBuff("SupportTowerBuffAS", aSModifier, BuffType.ASBoost);
                 }
                 break;
         }

@@ -46,7 +46,7 @@ public class Skills : MonoBehaviour
     {
         get
         {
-            return hero.targetter.GetTarget();
+            return hero.AttackAffector.m_Targetter.GetTarget();
         }
     }
 
@@ -57,7 +57,7 @@ public class Skills : MonoBehaviour
     {
         get
         {
-            return hero.targetter.GetAllTargets();
+            return hero.AttackAffector.m_Targetter.GetAllTargets();
         }
     }
 
@@ -78,7 +78,7 @@ public class Skills : MonoBehaviour
 
     private void OnDestroy()
     {
-        hero.targetter.acquiredTarget -= OnAcquiredTarget;
+        hero.AttackAffector.m_Targetter.acquiredTarget -= OnAcquiredTarget;
     }
 
 

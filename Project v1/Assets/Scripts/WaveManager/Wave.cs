@@ -71,7 +71,7 @@ public class Wave : TimedBehaviour
     protected void Spawn()
     {
         SpawnInstruction spawnInstruction = spawnInstructions[m_CurrentIndex];
-        SpawnAgent(spawnInstruction.agentUnite, spawnInstruction.startingNode);
+        SpawnAgent(spawnInstruction.agentUnit, spawnInstruction.startingNode);
     }
 
     /// <summary>
@@ -102,14 +102,17 @@ public class Wave : TimedBehaviour
     /// </summary>
     /// <param name="agentConfig">The agent to spawn</param>
     /// <param name="node">The starting node that the agent uses</param>
-    protected virtual void SpawnAgent(Unite enemy, Transform node)
+    protected virtual void SpawnAgent(Unit enemy, Node node)
     {
-        Vector3 spawnPosition = node.position;
+        Vector3 spawnPosition = node.GetRandomPointInNodeArea();
 
         GameObject _enemy = PoolManager.Instance.poolDictionnary[enemy.name].GetFromPool(spawnPosition);
-        Unite enemyUnit = _enemy.GetComponent<Unite>();
-        enemyUnit.transform.rotation = Quaternion.identity;
-        enemyUnit.configuration.SetHealth(enemyUnit.configuration.startingHealth);
+        Unit enemyUnit = _enemy.GetComponent<Unit>();
+        enemyUnit.transform.position = spawnPosition;
+        enemyUnit.Initialize();
+        enemyUnit.SetNode(node);
+        enemyUnit.transform.rotation = node.transform.rotation;
+
     }
 
     /// <summary>

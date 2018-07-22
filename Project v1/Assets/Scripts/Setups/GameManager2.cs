@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.Networking;
-using ImplementWaveSpawner;
 
 public class GameManager2 : NetworkBehaviour
 {
@@ -39,6 +35,12 @@ public class GameManager2 : NetworkBehaviour
     public WaveManager waveManager;
     public GameObject gameOverUI;
     public GameObject completeLevelUI;
+
+    /// <summary>
+    /// The tower library for this level
+    /// </summary>
+    public TowerLibrary towerLibrary;
+
 
     public static bool GameIsOver;
     public int playerInGameScene;

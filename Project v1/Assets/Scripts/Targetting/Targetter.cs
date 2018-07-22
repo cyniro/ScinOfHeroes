@@ -16,7 +16,18 @@ public class Targetter : MonoBehaviour
     /// <summary>
     /// Fires when a targetable exits the target collider
     /// </summary>
+    public event Action<Unit> allyEntersRange;
+
+    /// <summary>
+    /// Fires when a targetable exits the target collider
+    /// </summary>
     public event Action<Targetable> targetExitsRange;
+
+    /// <summary>
+    /// Fires when a targetable exits the target collider
+    /// </summary>
+    public event Action<Unit> allyExitsRange;
+
 
     /// <summary>
     /// Fires when an appropriate target is found
@@ -195,6 +206,12 @@ public class Targetter : MonoBehaviour
         var targetable = other.GetComponent<Targetable>();
         if (!IsTargetableValid(targetable))
         {
+            var isAnAlly = other.GetComponent<Unit>();
+            if (isAnAlly != null)
+            {
+                if (allyExitsRange != null)
+                    allyExitsRange(isAnAlly);
+            }
             return;
         }
 
@@ -223,6 +240,12 @@ public class Targetter : MonoBehaviour
         var targetable = other.GetComponent<Targetable>();
         if (!IsTargetableValid(targetable))
         {
+            var hasUnitComponent = other.GetComponent<Unit>();
+            if (hasUnitComponent != null)
+            {
+                if (allyEntersRange != null)
+                    allyEntersRange(hasUnitComponent);
+            }
             return;
         }
         targetable.removed += OnTargetRemoved;

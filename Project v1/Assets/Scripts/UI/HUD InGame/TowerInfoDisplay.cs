@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+using Towers;
 
 /// <summary>
 /// Used to display infomation about a tower using Unity UI
