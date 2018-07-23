@@ -8,22 +8,23 @@ Prefab:
     m_TransformParent: {fileID: 0}
     m_Modifications: []
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
+  m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1939404049432272}
-  m_IsPrefabParent: 1
+  m_IsPrefabAsset: 1
 --- !u!1 &1939404049432272
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 4759168062013008}
   - component: {fileID: 54219256967145422}
   - component: {fileID: 114677423866424274}
   - component: {fileID: 114697309140294644}
+  - component: {fileID: 114723216040531234}
   - component: {fileID: 136294504793647816}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MageProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,7 +34,7 @@ GameObject:
 --- !u!4 &4759168062013008
 Transform:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939404049432272}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -46,7 +47,7 @@ Transform:
 --- !u!54 &54219256967145422
 Rigidbody:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939404049432272}
   serializedVersion: 2
@@ -61,7 +62,7 @@ Rigidbody:
 --- !u!114 &114677423866424274
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939404049432272}
   m_Enabled: 1
@@ -76,7 +77,7 @@ MonoBehaviour:
 --- !u!114 &114697309140294644
 MonoBehaviour:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939404049432272}
   m_Enabled: 1
@@ -84,23 +85,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd147dcadfebf44aae4e2437802441a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 50
   chanceToSpawnCollisionPrefab: 1
   collisionParticles: {fileID: 198203146040348704, guid: 56709e62840ae684e915960824218b12,
     type: 2}
   alignment:
     unityObjectReference: {fileID: 11400000, guid: 174988734d69364459dac37ea4cc2e24,
       type: 2}
+--- !u!114 &114723216040531234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1939404049432272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cebc63af0da979d458f347ef938ea231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  yDestroyPoint: -50
 --- !u!136 &136294504793647816
 CapsuleCollider:
   m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1939404049432272}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.25
-  m_Height: 1.01
+  m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}

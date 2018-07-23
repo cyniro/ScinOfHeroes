@@ -20,11 +20,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4178525143036488}
   - component: {fileID: 54984009454134966}
-  - component: {fileID: 135377896386951434}
   - component: {fileID: 114983832231347880}
-  - component: {fileID: 114092097603865296}
   - component: {fileID: 114555310114829350}
-  m_Layer: 13
+  - component: {fileID: 114092097603865296}
+  - component: {fileID: 136900048030966520}
+  m_Layer: 11
   m_Name: Enemy_Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,8 +103,8 @@ MonoBehaviour:
   startSpeed: 10
   leadingPrecision: 2
   leadTarget: 1
---- !u!135 &135377896386951434
-SphereCollider:
+--- !u!136 &136900048030966520
+CapsuleCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -112,6 +112,7 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.25
+  m_Height: 1
+  m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0}

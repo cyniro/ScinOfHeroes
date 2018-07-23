@@ -80,6 +80,11 @@ public class Targetter : MonoBehaviour
     public float idleWaitTime = 2.0f;
 
     /// <summary>
+    /// The tower won't aim enemies
+    /// </summary>
+    public bool dontAim;
+
+    /// <summary>
     /// The current targetables in the collider
     /// </summary>
     protected List<Targetable> m_TargetsInRange = new List<Targetable>();
@@ -365,7 +370,7 @@ public class Targetter : MonoBehaviour
             return;
         }
 
-        if (m_CurrrentTargetable == null) // do idle rotation
+        if (m_CurrrentTargetable == null || dontAim) // do idle rotation
         {
             if (m_WaitTimer > 0)
             {

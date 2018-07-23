@@ -599,7 +599,7 @@ AudioSource:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1804851671011920}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 243247032315055076, guid: 91fb229ba11035f498e6664fab8d0b6d,
     type: 2}
@@ -732,7 +732,7 @@ MonoBehaviour:
   epicenter: {fileID: 4087753614569866}
   isMultiAttack: 0
   fireRate: 1
-  randomAudioSource: {fileID: 0}
+  randomAudioSource: {fileID: 114844214265441154}
   m_Targetter: {fileID: 114739689192056382}
   radiusEffectColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &114203689464595624
@@ -763,7 +763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a43f7b3c8f5b033489df7a3851c30268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lootDropped: 1000
+  lootDropped: 10000
 --- !u!114 &114283926411974274
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -850,13 +850,14 @@ MonoBehaviour:
   idleCorrectionTime: 2
   attachedCollider: {fileID: 135396420811271944}
   idleWaitTime: 2
+  dontAim: 0
 --- !u!114 &114844214265441154
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1804851671011920}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e11f03a17effc4238ba95c5b616ee02c, type: 3}
   m_Name: 

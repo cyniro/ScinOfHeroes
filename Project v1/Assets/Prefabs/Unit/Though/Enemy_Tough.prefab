@@ -850,6 +850,7 @@ MonoBehaviour:
   idleCorrectionTime: 2
   attachedCollider: {fileID: 135396420811271944}
   idleWaitTime: 2
+  dontAim: 0
 --- !u!114 &114844214265441154
 MonoBehaviour:
   m_ObjectHideFlags: 1
